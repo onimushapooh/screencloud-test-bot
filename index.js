@@ -33,6 +33,8 @@ app.get('/',(req,res)=>{
 app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
   console.log('Check Request : ',bodyReq)
+  
+  console.log('msg :: ',bodyReq.fulfillment.messages)
 
    var jsonRes = {
             "speech": "Hi, what can i help?",
