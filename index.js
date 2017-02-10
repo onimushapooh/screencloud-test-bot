@@ -37,11 +37,11 @@ app.post('/api.ai',(req,res)=>{
    var jsonRes = {
             "speech": "Hi, what can i help?",
             "displayText": "Hi, What can i help?",
-            "data": {abc:'test'},
-            "contextOut": [{app:'test',acreen:'test screen'}],
+            "data": {"abc":'test'},
+            "contextOut": [{"app":'youtube',"screen":'xiaomi'}],
             "source": "ScreenCloud"
             }     
-
+   res.type('application/json')         
    res.status(200).json(jsonRes)             
 })
 
