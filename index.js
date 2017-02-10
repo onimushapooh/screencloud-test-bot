@@ -69,32 +69,18 @@ app.post('/api.ai',(req,res)=>{
     "text": msg,
     "attachments": [
         {
-            "title": channel.get('title'),
-            "title_link": channel.get('link'),
+            "title": "test title",
+            "title_link": "test link",
             "color": "#36a64f",
 
             "fields": [
                 {
                     "title": "Condition",
-                    "value": "Temp " + condition.get('temp') +
-                             " " + units.get('temperature'),
+                    "value": "Temp TEST",
                     "short": "false"
-                },
-                {
-                    "title": "Wind",
-                    "value": "Speed: " + channel.get('wind').get('speed') +
-                             ", direction: " + channel.get('wind').get('direction'),
-                    "short": "true"
-                },
-                {
-                    "title": "Atmosphere",
-                    "value": "Humidity " + channel.get('atmosphere').get('humidity') +
-                             " pressure " + channel.get('atmosphere').get('pressure'),
-                    "short": "true"
                 }
             ],
-
-            "thumb_url": "http://l.yimg.com/a/i/us/we/52/" + condition.get('code') + ".gif"
+            "thumb_url": ""
         }
     ]
 }  
