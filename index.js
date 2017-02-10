@@ -37,8 +37,8 @@ app.post('/api.ai',(req,res)=>{
    var jsonRes = {
             "speech": "Hi, what can i help?",
             "displayText": "Hi, What can i help?",
-            "data": {"abc":"test"},
-            "contextOut": [req.body.result.parameters],
+            "data": {abc:'test'},
+            "contextOut": [{app:'test',acreen:'test screen'}],
             "source": "ScreenCloud"
             }     
 
