@@ -38,7 +38,7 @@ app.post('/api.ai',(req,res)=>{
     lifespan = 4
   }else if((bodyReq.parameters.app.length == 0 && bodyReq.parameters.playlist.length == 0) && bodyReq.parameters.screen.length != 0 ) {
     msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
-    lifespan = 2
+    lifespan = 4
   }else if(bodyReq.parameters.playlist.length != 0 && bodyReq.parameters.screen.length != 0){
     if(bodyReq.contexts.length>0) {
       let context = bodyReq.contexts[0]
