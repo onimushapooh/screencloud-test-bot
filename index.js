@@ -31,8 +31,8 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/api.ai',(req,res)=>{
-  // var bodyReq = JSON.parse(req.)
-  console.log('Check Request : ',req.body)
+  var bodyReq = JSON.parse(req.body.result)
+  console.log('Check Request : ',bodyReq)
 
    var jsonRes = {
             "speech": "Hi, what can i help?",
