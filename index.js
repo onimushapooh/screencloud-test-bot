@@ -45,7 +45,10 @@ app.post('/api.ai',(req,res)=>{
   }
   console.log('Check Request : ',bodyReq)
   
-  console.log('contextOut :: ',bodyReq.contexts.parameters)
+  bodyReq.contexts.forEach(function(element) {
+    console.log('context :: ',element.parameters)  
+  }, this);
+  
   
    var jsonRes = {
             "speech": msg,
