@@ -42,11 +42,11 @@ app.post('/api.ai',(req,res)=>{
   }else {
     if(bodyReq.contexts.length>0) {
       let context = bodyReq.contexts[0]
-      msg = 'Show '+context['app.original']+' on '+context['screen.original']
+      msg = 'Show '+context.parameters['app.original']+' on '+context.parameters['screen.original']
       lifespan = 1
     }else {
       msg = 'I dont understand that.'
-      lifespan = 1
+      lifespan = 4
     }
 
     
