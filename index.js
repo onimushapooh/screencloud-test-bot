@@ -41,11 +41,11 @@ app.post('/api.ai',(req,res)=>{
     lifespan = 2
   }else {
     msg = 'Show '+bodyReq.parameters.app+' on '+ bodyReq.parameters.screen
-    lifespan = 1
+    lifespan = 2
   }
   console.log('Check Request : ',bodyReq)
   
-  // console.log('msg :: ',bodyReq.fulfillment.messages)
+  console.log('contextOut :: ',bodyReq.contexts.parameters)
   
    var jsonRes = {
             "speech": msg,
