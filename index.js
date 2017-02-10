@@ -33,7 +33,7 @@ app.get('/',(req,res)=>{
 app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
   var msg,lifespan
-  if(bodyReq.parameters.app=='screen' || (bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length == 0)) {
+  if(bodyReq.parameters.screen=='screen' || (bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length == 0)) {
     msg = 'Which screen do you want?'
     lifespan = 2
   }else if(bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length != 0 ) {
