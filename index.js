@@ -36,7 +36,7 @@ app.post('/api.ai',(req,res)=>{
   if(bodyReq.parameters.screen=='screen' || (bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length == 0)) {
     msg = 'Which screen do you want?'
     lifespan = 4
-  }else if((bodyReq.parameters.app.length == 0 || bodyReq.parameters.playlist.length == 0) && bodyReq.parameters.screen.length != 0 ) {
+  }else if((bodyReq.parameters.app.length == 0 && bodyReq.parameters.playlist.length == 0) && bodyReq.parameters.screen.length != 0 ) {
     msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
     lifespan = 2
   }else if(bodyReq.parameters.playlist.length != 0 && bodyReq.parameters.screen.length != 0){
