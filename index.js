@@ -84,13 +84,20 @@ app.post('/api.ai',(req,res)=>{
         }
     ]
 }  
-   var jsonRes = {
+  //  var jsonRes = {
+  //           "speech": msg,
+  //           "displayText": msg,
+  //           "data":  {"slack":slack_message},
+  //           "contextOut": [{"name":"ScreenCloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"screen":bodyReq.parameters.screen}}],
+  //           "source": "ScreenCloud"
+  //           } 
+  var jsonRes = {
             "speech": msg,
             "displayText": msg,
             "data":  {"slack":slack_message},
-            "contextOut": [{"name":"ScreenCloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"screen":bodyReq.parameters.screen}}],
             "source": "ScreenCloud"
-            }     
+          } 
+              
    res.type('application/json')         
    res.status(200).json(jsonRes)             
 })
