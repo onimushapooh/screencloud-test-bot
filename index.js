@@ -32,18 +32,15 @@ app.get('/',(req,res)=>{
 
 app.post('/api.ai',(req,res)=>{
   // var bodyReq = JSON.parse(req.)
-  console.log('Check Request : ' + req)
-  // var jsonRes = {"status": {
-  //                   "code": 206,
-  //                   "errorType": "partial_content",
-  //                   "errorDetails": "Webhook call failed. Status code 503. Error:503 Service Unavailable"
-  //                 }
-  //               }
-   var jsonRes = {"fulfillment": {
-            "speech": "Today in Boston: Fair, the temperature is 37 F",
-            "source": "apiai-weather-webhook-sample",
-            "displayText": "Today in Boston: Fair, the temperature is 37 F"
-          }}             
+  console.log('Check Request : ',req.body)
+
+   var jsonRes = {
+            "speech": "Hi, what can i help?",
+            "displayText": "Hi, What can i help?",
+            "data": {"abc":"test"},
+            "contextOut": [req.body.result.parameters],
+            "source": "ScreenCloud"
+            }     
 
    res.status(200).json(jsonRes)             
 })
