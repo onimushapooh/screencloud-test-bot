@@ -40,8 +40,16 @@ app.post('/api.ai',(req,res)=>{
     msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
     lifespan = 2
   }else {
-    msg = 'Show '+bodyReq.parameters.app+' on '+ bodyReq.parameters.screen
-    lifespan = 3
+    if(bodyReq.contexts.length>0) {
+      let context = bodyReq.contexts[0]
+      msg = 'Show '+context['app.original']+' on '+context['screen.original']
+      lifespan = 1
+    }else {
+      msg = 'I dont understand that.'
+      lifespan = 1
+    }
+
+    
   }
   console.log('Check Request : ',bodyReq)
   
