@@ -36,9 +36,18 @@ app.post('/api.ai',(req,res)=>{
   if(bodyReq.parameters.screen=='screen' || (bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length == 0)) {
     msg = 'Which screen do you want?'
     lifespan = 4
-  }else if(bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length != 0 ) {
+  }else if((bodyReq.parameters.app.length == 0 || bodyReq.parameters.playlist.length == 0) && bodyReq.parameters.screen.length != 0 ) {
     msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
     lifespan = 2
+  }else if(bodyReq.parameters.playlist.length != 0 && bodyReq.parameters.screen.length != 0){
+    if(bodyReq.contexts.length>0) {
+      let context = bodyReq.contexts[0]
+      msg = 'Show '+context.parameters['playlist.original']+' on '+context.parameters['screen.original']
+      lifespan = 1
+    }else {
+      msg = 'I dont understand that.'
+      lifespan = 4
+    }
   }else {
     if(bodyReq.contexts.length>0) {
       let context = bodyReq.contexts[0]
@@ -48,7 +57,6 @@ app.post('/api.ai',(req,res)=>{
       msg = 'I dont understand that.'
       lifespan = 4
     }
-
     
   }
   console.log('Check Request : ',bodyReq)
