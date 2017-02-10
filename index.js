@@ -32,15 +32,26 @@ app.get('/',(req,res)=>{
 
 app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
+  var msg,lifespan
+  if(bodyReq.parameters.app=='screen') {
+    msg = 'Which screen do you want?'
+    lifespan = 2
+  }else if(bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length != 0 ) {
+    msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
+    lifespan = 2
+  }else {
+    msg = 'Show '+bodyReq.parameters.app+' on '+ bodyReq.parameters.screen
+    lifespan = 1
+  }
   console.log('Check Request : ',bodyReq)
   
-  console.log('msg :: ',bodyReq.fulfillment.messages)
-
+  // console.log('msg :: ',bodyReq.fulfillment.messages)
+  
    var jsonRes = {
-            "speech": "Hi, what can i help?",
-            "displayText": "Hi, What can i help?",
+            "speech": msg,
+            "displayText": msg,
             "data": {"abc":'test'},
-            "contextOut": [{"name":"ScreenCloud", "lifespan":1, "parameters":{"app":"youtube","screen":"xiaomi"}}],
+            "contextOut": [{"name":"ScreenCloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"screen":bodyReq.parameters.screen}}],
             "source": "ScreenCloud"
             }     
    res.type('application/json')         
