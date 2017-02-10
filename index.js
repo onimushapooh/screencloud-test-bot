@@ -31,8 +31,8 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/api.ai',(req,res)=>{
-  var bodyReq = JSON.parse(req.body)
-  console.log('Check Request : ' + bodyReq)
+  // var bodyReq = JSON.parse(req.)
+  console.log('Check Request : ' + req)
   // var jsonRes = {"status": {
   //                   "code": 206,
   //                   "errorType": "partial_content",
