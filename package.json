@@ -1,0 +1,31 @@
+{
+  "name": "screencloud-test-bot",
+  "version": "1.0.0",
+  "description": "test bot for screencloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onimushapooh/screencloud-test-bot.git"
+  },
+  "keywords": [
+    "test",
+    "bot",
+    "screencloud"
+  ],
+  "author": "Pooh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onimushapooh/screencloud-test-bot/issues"
+  },
+  "homepage": "https://github.com/onimushapooh/screencloud-test-bot#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1"
+  }
+}
