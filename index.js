@@ -43,7 +43,7 @@ app.post('/api.ai',(req,res)=>{
             "displayText": "Today in Boston: Fair, the temperature is 37 F"
           }}             
 
-   res.status(503).json(jsonRes)             
+   res.status(200).json(jsonRes)             
 })
 
 // app.listen((process.env.PORT || 8080),(req,res)=>{
