@@ -41,7 +41,7 @@ app.post('/api.ai',(req,res)=>{
     lifespan = 2
   }else {
     msg = 'Show '+bodyReq.parameters.app+' on '+ bodyReq.parameters.screen
-    lifespan = 2
+    lifespan = 1
   }
   console.log('Check Request : ',bodyReq)
   
