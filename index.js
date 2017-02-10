@@ -65,11 +65,43 @@ app.post('/api.ai',(req,res)=>{
     console.log('context :: ',element.parameters)  
   }, this);
   
-  
+  let slack_message = {
+    "text": msg,
+    "attachments": [
+        {
+            "title": channel.get('title'),
+            "title_link": channel.get('link'),
+            "color": "#36a64f",
+
+            "fields": [
+                {
+                    "title": "Condition",
+                    "value": "Temp " + condition.get('temp') +
+                             " " + units.get('temperature'),
+                    "short": "false"
+                },
+                {
+                    "title": "Wind",
+                    "value": "Speed: " + channel.get('wind').get('speed') +
+                             ", direction: " + channel.get('wind').get('direction'),
+                    "short": "true"
+                },
+                {
+                    "title": "Atmosphere",
+                    "value": "Humidity " + channel.get('atmosphere').get('humidity') +
+                             " pressure " + channel.get('atmosphere').get('pressure'),
+                    "short": "true"
+                }
+            ],
+
+            "thumb_url": "http://l.yimg.com/a/i/us/we/52/" + condition.get('code') + ".gif"
+        }
+    ]
+}  
    var jsonRes = {
             "speech": msg,
             "displayText": msg,
-            "data":  {"slack":{"text":msg}},
+            "data":  {"slack":slack_message},
             "contextOut": [{"name":"ScreenCloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"screen":bodyReq.parameters.screen}}],
             "source": "ScreenCloud"
             }     
