@@ -31,12 +31,17 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/api.ai',(req,res)=>{
-  var jsonRes = {"status": {
-                    "code": 206,
-                    "errorType": "partial_content",
-                    "errorDetails": "Webhook call failed. Status code 503. Error:503 Service Unavailable"
-                  }
-                }
+  // var jsonRes = {"status": {
+  //                   "code": 206,
+  //                   "errorType": "partial_content",
+  //                   "errorDetails": "Webhook call failed. Status code 503. Error:503 Service Unavailable"
+  //                 }
+  //               }
+   jsonRes = {"fulfillment": {
+            "speech": "Today in Boston: Fair, the temperature is 37 F",
+            "source": "apiai-weather-webhook-sample",
+            "displayText": "Today in Boston: Fair, the temperature is 37 F"
+          }}             
 
    res.status(503).json(jsonRes)             
 })
