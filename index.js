@@ -38,7 +38,7 @@ app.post('/api.ai',(req,res)=>{
             "speech": "Hi, what can i help?",
             "displayText": "Hi, What can i help?",
             "data": {"abc":'test'},
-            "contextOut": [{"app":'youtube',"screen":'xiaomi'}],
+            "contextOut": [{"name":"ScreenCloud", "lifespan":1, "parameters":{"app":"youtube","screen":"xiaomi"}}],
             "source": "ScreenCloud"
             }     
    res.type('application/json')         
