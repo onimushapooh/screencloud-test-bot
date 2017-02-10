@@ -69,7 +69,7 @@ app.post('/api.ai',(req,res)=>{
    var jsonRes = {
             "speech": msg,
             "displayText": msg,
-            "data":  {"slack":msg},
+            "data":  {"slack":{"text":msg}},
             "contextOut": [{"name":"ScreenCloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"screen":bodyReq.parameters.screen}}],
             "source": "ScreenCloud"
             }     
