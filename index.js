@@ -65,7 +65,7 @@ app.post('/api.ai',(req,res)=>{
     console.log('context :: ',element.parameters)  
   }, this);
   
-  let slack_message = {
+  var slack_message = {
     "text": msg,
     "attachments": [
         {
