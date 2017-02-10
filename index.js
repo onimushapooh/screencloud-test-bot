@@ -35,13 +35,13 @@ app.post('/api.ai',(req,res)=>{
   var msg,lifespan
   if(bodyReq.parameters.screen=='screen' || (bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length == 0)) {
     msg = 'Which screen do you want?'
-    lifespan = 3
+    lifespan = 1
   }else if(bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length != 0 ) {
     msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
     lifespan = 2
   }else {
     msg = 'Show '+bodyReq.parameters.app+' on '+ bodyReq.parameters.screen
-    lifespan = 1
+    lifespan = 3
   }
   console.log('Check Request : ',bodyReq)
   
