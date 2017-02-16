@@ -42,7 +42,7 @@ app.post('/api.ai',(req,res)=>{
   }else if(bodyReq.parameters.playlist.length != 0 && bodyReq.parameters.screen.length != 0){
     if(bodyReq.contexts.length>0) {
       let context = bodyReq.contexts[0]
-      msg = 'Show '+context.parameters['playlist.original']+' on '+context.parameters['screen.original']
+      msg = 'Show '+context.parameters['playlist']+' on '+context.parameters['screen']
       lifespan = 1
     }else {
       msg = 'I dont understand that.'
@@ -51,7 +51,7 @@ app.post('/api.ai',(req,res)=>{
   }else {
     if(bodyReq.contexts.length>0) {
       let context = bodyReq.contexts[0]
-      msg = 'Show '+context.parameters['app.original']+' on '+context.parameters['screen.original']
+      msg = 'Show '+context.parameters['app']+' on '+context.parameters['screen']
       lifespan = 1
     }else {
       msg = 'I dont understand that.'
@@ -67,23 +67,7 @@ app.post('/api.ai',(req,res)=>{
   
   var slack_message = {
     "text": msg,
-    "attachments": [
-        {
-            "title": "test title",
-            "title_link": "test link",
-            "color": "#36a64f",
-
-            "fields": [
-                {
-                    "title": "Condition",
-                    "value": "Temp TEST",
-                    "short": "false"
-                }
-            ],
-            "thumb_url": ""
-        }
-    ]
-}  
+  }  
    var jsonRes = {
             "speech": msg,
             "displayText": msg,
