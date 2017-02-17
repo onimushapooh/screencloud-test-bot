@@ -107,11 +107,10 @@ app.post('/api.ai',(req,res)=>{
   
   // ws.send(JSON.stringify(bodyReq.parameters))
 
-  var rexPattern = bodyReq.parameters.actions|bodyReq.parameters.app|of
   var search_msg = msg.replace(bodyReq.parameters.actions,"")
   search_msg = search_msg.replace(bodyReq.parameters.app,"")
   search_msg = search_msg.replace("of","")
-  
+
   broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
 
   var jsonRes = {
