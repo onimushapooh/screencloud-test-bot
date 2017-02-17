@@ -11,34 +11,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 // const api = express()
-var ws
+var WebSocketServer = require('uws').Server
+var wss = new WebSocketServer({ port: process.env.WSPORT || 3901 })
 
-var connect = function(url){
-                ws = new WebSocket(url);
-
-                ws.onopen = function()
-                {
-                  
-                  // ws.send(access)
-
-                  console.log("Message is sent...");
-                };
-
-                ws.onmessage = function (evt)
-                {
-                  var received_msg = evt.data;
-                  console.log("Message is received... ", received_msg);
-                };
-
-                ws.onclose = function()
-                {
-                  // websocket is closed.
-                  console.log("Connection is closed...");
-                  setTimeout(function(){
-                    connect(url)
-                  },2000)
-                }
-            }
+var googleWSConnections = {}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -124,7 +100,9 @@ app.post('/api.ai',(req,res)=>{
     "text": "OK, "+msg,
   }
   
-  ws.send(JSON.stringify(bodyReq.parameters))
+  // ws.send(JSON.stringify(bodyReq.parameters))
+
+  broadcastWebhook( JSON.stringify(bodyReq.parameters) )
 
   var jsonRes = {
           "speech": "OK, "+msg,
@@ -138,12 +116,54 @@ app.post('/api.ai',(req,res)=>{
   res.status(200).json(jsonRes)             
 })
 
+app.get('/sampleHook',(req,res)=>{
+  console.log('sample hook : ' , req.query )
+  broadcastWebhook(req.query.action || 'test')
+  res.send('done')
+})
+
 // app.listen((process.env.PORT || 8080),(req,res)=>{
 
 // })
 var server = http.createServer(app).listen(process.env.PORT,function(){
   
-  connect('https://voicewebsocket.herokuapp.com')
+  // connect('https://voicewebsocket.herokuapp.com')
 
   console.log('server start poperly');
 });
+
+
+function broadcastWebhook (message) {
+  var wsClientKeys = Object.keys(googleWSConnections)
+  console.log('wsClientKeys = ', wsClientKeys)
+  wsClientKeys.map( (clientKey) => {
+    var ws = googleWSConnections[clientKey]
+    try {
+      ws.send(message)
+    } catch ( e ){
+      console.log('can not send message to client : ' + clientKey, e)
+      delete googleWSConnections[clientKey]
+    }
+  })
+}
+
+function connectWS (ws, clientKey) {
+  console.log('clientKey = ', clientKey)
+}
+
+wss.on('connection', function (ws) {
+  console.log('[wss] connection', ws)
+  var clientKey = ''
+
+  ws.once('message', (message)=>{
+    console.log('msg = ', message)
+    var jsonMsg = JSON.parse(message)
+    clientKey = jsonMsg.clientKey
+    googleWSConnections[clientKey] = ws 
+  });
+
+  ws.once('close', ()=> {
+    console.log('client is close : ', clientKey)
+    delete googleWSConnections[clientKey]
+  })
+})
