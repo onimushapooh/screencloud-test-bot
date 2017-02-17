@@ -10,8 +10,35 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const app = express()
-const api = express()
+// const api = express()
+var ws
 
+var connect = function(url){
+                ws = new WebSocket(url);
+
+                ws.onopen = function()
+                {
+                  
+                  // ws.send(access)
+
+                  console.log("Message is sent...");
+                };
+
+                ws.onmessage = function (evt)
+                {
+                  var received_msg = evt.data;
+                  console.log("Message is received... ", received_msg);
+                };
+
+                ws.onclose = function()
+                {
+                  // websocket is closed.
+                  console.log("Connection is closed...");
+                  setTimeout(function(){
+                    connect(url)
+                  },2000)
+                }
+            }
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -19,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.set('port', (process.env.PORT || 8080))
 
 // enable CORS
-api.use(function (req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Credentials', 'true')
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE')
@@ -96,6 +123,9 @@ app.post('/api.ai',(req,res)=>{
   var slack_message = {
     "text": "OK, "+msg,
   }
+  
+  ws.send(JSON.stringify(bodyReq.parameters))
+
   var jsonRes = {
           "speech": "OK, "+msg,
           "displayText":"OK, "+msg,
@@ -112,5 +142,8 @@ app.post('/api.ai',(req,res)=>{
 
 // })
 var server = http.createServer(app).listen(process.env.PORT,function(){
+  
+  connect('https://voicewebsocket.herokuapp.com')
+
   console.log('server start poperly');
 });
