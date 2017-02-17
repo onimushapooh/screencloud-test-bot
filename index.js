@@ -88,6 +88,9 @@ app.post('/api.ai',(req,res)=>{
  
   console.log('Check Request : ',bodyReq)
   
+  bodyReq.contexts.forEach(function(element) {
+    console.log('context :: ',element.parameters)  
+  }, this);
   // render
   var slack_message = {
     "text": "Test Message from ScreenCloud Bot",
