@@ -100,7 +100,7 @@ app.post('/api.ai',(req,res)=>{
           "speech": "OK, "+msg,
           "displayText":"OK, "+msg,
           "data":  {"slack":slack_message},
-          "contextOut": [{"name":"Screen Cloud", "lifespan":2, "parameters":{"app":bodyReq.parameters.app,"keywords":bodyReq.parameters.keywords}}],
+          "contextOut": [{"name":"ScreenCloud", "lifespan":2, "parameters":{"app":bodyReq.parameters.app,"keywords":bodyReq.parameters.keywords}}],
           "source": "Screen-Cloud"
         }
               
