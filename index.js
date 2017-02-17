@@ -12,7 +12,7 @@ const bodyParser = require('body-parser')
 const app = express()
 // const api = express()
 var WebSocketServer = require('uws').Server
-var wss = new WebSocketServer({ port: process.env.WSPORT || 3901 })
+
 
 var googleWSConnections = {}
 
@@ -132,6 +132,7 @@ var server = http.createServer(app).listen(process.env.PORT,function(){
   console.log('server start poperly');
 });
 
+var wss = new WebSocketServer({ server })
 
 function broadcastWebhook (message) {
   var wsClientKeys = Object.keys(googleWSConnections)
