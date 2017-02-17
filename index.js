@@ -95,9 +95,14 @@ app.post('/api.ai',(req,res)=>{
     console.log('context :: ',element.parameters)  
   }, this);
   // render
-  msg = bodyReq.resolvedQuery
+  if(bodyReq.parameters.app == '' || bodyReq.parameters.actions === '') {
+    msg = 'Sorry, Command not complete'
+  }else {
+    msg = bodyReq.resolvedQuery
+  }
+  // msg = bodyReq.resolvedQuery
   var slack_message = {
-    "text": "OK, "+msg,
+    "text": msg,
   }
   
   // ws.send(JSON.stringify(bodyReq.parameters))
@@ -105,10 +110,10 @@ app.post('/api.ai',(req,res)=>{
   broadcastWebhook( JSON.stringify(bodyReq.parameters) )
 
   var jsonRes = {
-          "speech": "OK, "+msg,
-          "displayText":"OK, "+msg,
+          "speech": msg,
+          "displayText":msg,
           "data":  {"slack":slack_message},
-          "contextOut": [{"name":"ScreenCloud", "lifespan":2, "parameters":{"app":bodyReq.parameters.app,"keywords":bodyReq.parameters.keywords}}],
+          "contextOut": [{"name":"ScreenCloud", "lifespan":1, "parameters":{"app":bodyReq.parameters.app,"action":bodyReq.parameters.keywords}}],
           "source": "Screen-Cloud"
         }
               
