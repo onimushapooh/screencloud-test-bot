@@ -92,19 +92,20 @@ app.post('/api.ai',(req,res)=>{
     console.log('context :: ',element.parameters)  
   }, this);
   // render
+  msg = bodyReq.resolvedQuery
   var slack_message = {
-    "text": "Test Message from ScreenCloud Bot",
+    "text": "OK, "+msg,
   }
-   var jsonRes = {
-            "speech": "Hello Test Message",
-            "displayText":"Hello Test Message",
-            "data":  {"slack":slack_message},
-            "contextOut": [{"name":"Screen Cloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"keywords":bodyReq.parameters.keywords}}],
-            "source": "Screen-Cloud"
-          }
-               
-   res.type('application/json')         
-   res.status(200).json(jsonRes)             
+  var jsonRes = {
+          "speech": "OK, "+msg,
+          "displayText":"OK, "+msg,
+          "data":  {"slack":slack_message},
+          "contextOut": [{"name":"Screen Cloud", "lifespan":2, "parameters":{"app":bodyReq.parameters.app,"keywords":bodyReq.parameters.keywords}}],
+          "source": "Screen-Cloud"
+        }
+              
+  res.type('application/json')         
+  res.status(200).json(jsonRes)             
 })
 
 // app.listen((process.env.PORT || 8080),(req,res)=>{
