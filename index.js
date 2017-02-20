@@ -99,6 +99,40 @@ app.post('/api.ai',(req,res)=>{
     msg = 'Sorry, Command not complete'
   }else {
     msg = bodyReq.resolvedQuery
+    search_msg = msg.replace(new RegExp(bodyReq.parameters.actions+'|'+bodyReq.parameters.app, 'gi'), '')
+    switch ( bodyReq.parameters.app ) {
+      case 'youtube':
+        search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+        break;
+      case 'message':
+        // search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+
+        break;
+      case 'nba':
+				// appURL = 'sports/index.html?sports=nba&delay=30&version=1.0.5'
+        break;
+      case 'nfl':
+				// appURL = 'sports/index.html?sports=nfl&delay=30&version=1.0.5'
+        break;
+      case 'epl':
+				// appURL = 'sports/index.html?sports=epl&delay=30&version=1.0.5'
+        break;
+      case 'time':
+        search_msg = search_msg.replace(new RegExp('current', 'gi'), '');
+				// appURL = 'clock/index.html?style=digital&theme=dark&ampm=true&date=true&second=false&address='+this.state.display_text+'&version=1.0.15'
+        break;  
+      case 'weather':
+        search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+				// appURL = 'weather/index.html?location1='+this.state.display_text+'&location2=&location3=&unit=c&version=1.1.45'
+        break;
+      case 'skynews':
+				// appURL = 'live_news/index.html?news_id=sky_news&version=1.0.3'
+        break;       
+      default:
+        
+      }
+
+    broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
   // msg = bodyReq.resolvedQuery
   var slack_message = {
@@ -106,12 +140,6 @@ app.post('/api.ai',(req,res)=>{
   }
   
   // ws.send(JSON.stringify(bodyReq.parameters))
-
-  var search_msg = msg.replace(bodyReq.parameters.actions,"")
-  search_msg = search_msg.replace(bodyReq.parameters.app,"")
-  search_msg = search_msg.replace("of","")
-
-  broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
 
   var jsonRes = {
           "speech": msg,
