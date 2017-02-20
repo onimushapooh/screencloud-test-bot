@@ -118,11 +118,11 @@ app.post('/api.ai',(req,res)=>{
 				// appURL = 'sports/index.html?sports=epl&delay=30&version=1.0.5'
         break;
       case 'time':
-        search_msg = search_msg.replace(new RegExp('current', 'gi'), '');
+        search_msg = search_msg.replace(new RegExp('current|in', 'gi'), '');
 				// appURL = 'clock/index.html?style=digital&theme=dark&ampm=true&date=true&second=false&address='+this.state.display_text+'&version=1.0.15'
         break;  
       case 'weather':
-        search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+        search_msg = search_msg.replace(new RegExp('of|on|in', 'gi'), '');
 				// appURL = 'weather/index.html?location1='+this.state.display_text+'&location2=&location3=&unit=c&version=1.1.45'
         break;
       case 'slack':
