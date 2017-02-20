@@ -139,7 +139,8 @@ app.post('/api.ai',(req,res)=>{
       default:
         
       }
-
+      console.log('message = ',search_msg)
+      
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
   // msg = bodyReq.resolvedQuery
