@@ -143,9 +143,15 @@ app.post('/api.ai',(req,res)=>{
         break;       
       default:
         
+    }
+    
+    if(bodyReq.parameters.any != '' || bodyReq.parameters.any.length > 0) {
+      search_msg = bodyReq.parameters.any
+      if(bodyReq.parameters.app=='instagram') {
+        search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
       }
-      console.log('message = ',search_msg)
-
+      console.log('new message = ',search_msg)
+    }
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
   // msg = bodyReq.resolvedQuery
