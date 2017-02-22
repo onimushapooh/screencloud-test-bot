@@ -151,6 +151,8 @@ app.post('/api.ai',(req,res)=>{
         search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
       }
       console.log('new message = ',search_msg)
+    }else {
+      console.log('fallback msg = ',search_msg)
     }
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
