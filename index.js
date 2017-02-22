@@ -122,7 +122,7 @@ app.post('/api.ai',(req,res)=>{
 				// appURL = 'clock/index.html?style=digital&theme=dark&ampm=true&date=true&second=false&address='+this.state.display_text+'&version=1.0.15'
         break;  
       case 'weather':
-        search_msg = search_msg.replace(new RegExp('of|on|in', 'gi'), '');
+        search_msg = search_msg.replace(new RegExp('in', 'gi'), '');
 				// appURL = 'weather/index.html?location1='+this.state.display_text+'&location2=&location3=&unit=c&version=1.1.45'
         break;
       case 'slack':
@@ -151,9 +151,13 @@ app.post('/api.ai',(req,res)=>{
         search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
       }
       console.log('new message = ',search_msg)
+    }else if(bodyReq.parameters['geo-city'].length > 0) {
+      search_msg = bodyReq.parameters['geo-city']
+      console.log('city message = ',search_msg)
     }else {
       console.log('fallback msg = ',search_msg)
     }
+    
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
   // msg = bodyReq.resolvedQuery
