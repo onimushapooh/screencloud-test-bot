@@ -96,7 +96,7 @@ app.post('/api.ai',(req,res)=>{
   }, this);
   // render
   if(bodyReq.parameters.app == '' || bodyReq.parameters.actions === '') {
-    msg = 'Sorry, Command not complete'
+    msg = 'Sorry, i did not quite catch that'
   }else {
     msg = bodyReq.resolvedQuery
     search_msg = msg.replace(new RegExp(bodyReq.parameters.actions+'|'+bodyReq.parameters.app, 'gi'), '')
@@ -135,6 +135,7 @@ app.post('/api.ai',(req,res)=>{
         break;
       case 'instagram':
         search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+        search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
 
         break;  
       case 'skynews':
