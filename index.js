@@ -90,12 +90,8 @@ app.post('/api.ai',(req,res)=>{
   var msg,lifespan
  
   console.log('Check Request : ',bodyReq)
-  
-  // bodyReq.contexts.forEach(function(element) {
-  //   console.log('context :: ',element.parameters)  
-  // }, this);
   // render
-  if(bodyReq.parameters.app == '' || bodyReq.parameters.actions === '') {
+  if(bodyReq.parameters.app == '') {
     msg = 'Sorry, i did not quite catch that'
   }else {
     msg = bodyReq.resolvedQuery
@@ -105,41 +101,28 @@ app.post('/api.ai',(req,res)=>{
         search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
         break;
       case 'message':
-        // search_msg = search_msg.replace(new RegExp('of', 'gi'), '');
-
         break;
       case 'nba':
-				// appURL = 'sports/index.html?sports=nba&delay=30&version=1.0.5'
         break;
       case 'nfl':
-				// appURL = 'sports/index.html?sports=nfl&delay=30&version=1.0.5'
         break;
       case 'epl':
-				// appURL = 'sports/index.html?sports=epl&delay=30&version=1.0.5'
         break;
       case 'time':
         search_msg = search_msg.replace(new RegExp('current|in', 'gi'), '');
-				// appURL = 'clock/index.html?style=digital&theme=dark&ampm=true&date=true&second=false&address='+this.state.display_text+'&version=1.0.15'
-        break;  
+	     break;  
       case 'weather':
         search_msg = search_msg.replace(new RegExp('in', 'gi'), '');
-				// appURL = 'weather/index.html?location1='+this.state.display_text+'&location2=&location3=&unit=c&version=1.1.45'
-        break;
+				break;
       case 'slack':
-        // search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
-				// appURL = 'weather/index.html?location1='+this.state.display_text+'&location2=&location3=&unit=c&version=1.1.45'
         break;
       case 'trello':
-        // search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
-				// appURL = 'weather/index.html?location1='+this.state.display_text+'&location2=&location3=&unit=c&version=1.1.45'
         break;
       case 'instagram':
         search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
         search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
-
         break;  
-      case 'skynews':
-				// appURL = 'live_news/index.html?news_id=sky_news&version=1.0.3'
+      case 'skynews':		
         break;       
       default:
         
@@ -160,12 +143,10 @@ app.post('/api.ai',(req,res)=>{
 
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
-  // msg = bodyReq.resolvedQuery
+  
   var slack_message = {
     "text": msg,
   }
-  
-  // ws.send(JSON.stringify(bodyReq.parameters))
 
   var jsonRes = {
           "speech": msg,
