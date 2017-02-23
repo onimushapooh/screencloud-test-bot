@@ -91,9 +91,9 @@ app.post('/api.ai',(req,res)=>{
  
   console.log('Check Request : ',bodyReq)
   
-  bodyReq.contexts.forEach(function(element) {
-    console.log('context :: ',element.parameters)  
-  }, this);
+  // bodyReq.contexts.forEach(function(element) {
+  //   console.log('context :: ',element.parameters)  
+  // }, this);
   // render
   if(bodyReq.parameters.app == '' || bodyReq.parameters.actions === '') {
     msg = 'Sorry, i did not quite catch that'
@@ -157,7 +157,7 @@ app.post('/api.ai',(req,res)=>{
     }else {
       console.log('fallback msg = ',search_msg)
     }
-    
+
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
   // msg = bodyReq.resolvedQuery
