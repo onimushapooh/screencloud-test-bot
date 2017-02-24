@@ -95,7 +95,7 @@ app.post('/api.ai',(req,res)=>{
     msg = 'Sorry, i did not quite catch that'
   }else {
     msg = bodyReq.resolvedQuery
-    search_msg = msg.replace(new RegExp(bodyReq.parameters.actions+'|'+bodyReq.parameters.app, 'gi'), '')
+    search_msg = msg.replace(new RegExp(bodyReq.parameters.actions+'|'+bodyReq.parameters.app+'|show', 'gi'), '')
     switch ( bodyReq.parameters.app ) {
       case 'youtube':
         search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
@@ -143,7 +143,7 @@ app.post('/api.ai',(req,res)=>{
 
     broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
   }
-  
+
   var slack_message = {
     "text": msg,
   }
