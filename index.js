@@ -160,6 +160,85 @@ app.post('/api.ai',(req,res)=>{
   res.status(200).json(jsonRes)             
 })
 
+app.post('/alexa.ai',(req,res)=>{
+  var bodyReq = req.body.request
+  var msg,lifespan
+ 
+  console.log('Check Request : ',bodyReq)
+  // render
+  // if(bodyReq.parameters.app == '') {
+  //   msg = 'Sorry, i did not quite catch that'
+  // }else {
+  //   msg = bodyReq.resolvedQuery
+  //   search_msg = msg.replace(new RegExp(bodyReq.parameters.actions+'|'+bodyReq.parameters.app+'|show', 'gi'), '')
+  //   switch ( bodyReq.parameters.app ) {
+  //     case 'youtube':
+  //       search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+  //       break;
+  //     case 'message':
+  //       break;
+  //     case 'nba':
+  //       break;
+  //     case 'nfl':
+  //       break;
+  //     case 'epl':
+  //       break;
+  //     case 'time':
+  //       search_msg = search_msg.replace(new RegExp('current|in', 'gi'), '');
+	//      break;  
+  //     case 'weather':
+  //       search_msg = search_msg.replace(new RegExp('in', 'gi'), '');
+	// 			break;
+  //     case 'slack':
+  //       break;
+  //     case 'trello':
+  //       break;
+  //     case 'instagram':
+  //       search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
+  //       search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
+  //       break;  
+  //     case 'skynews':		
+  //       break;       
+  //     default:
+        
+  //   }
+    
+  //   if(bodyReq.parameters.any != '' || bodyReq.parameters.any.length > 0) {
+  //     search_msg = bodyReq.parameters.any
+  //     if(bodyReq.parameters.app=='instagram') {
+  //       search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
+  //     }
+  //     console.log('new message = ',search_msg)
+  //   }else if(bodyReq.parameters['geo-city'].length > 0) {
+  //     search_msg = bodyReq.parameters['geo-city']
+  //     console.log('city message = ',search_msg)
+  //   }else {
+  //     console.log('fallback msg = ',search_msg)
+  //   }
+
+  //   broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
+  // }
+
+  // var slack_message = {
+  //   "text": msg,
+  // }
+
+  var jsonRes = {
+          "version": "1.0",
+          "sessionAttributes":{},
+          "response": {
+            "shouldEndSession": true,
+            "outputSpeech":{
+              "type":"SSML",
+              "ssml":"<speak>Hi, I'm ScreenCloud. this response from service for test</speak>"
+            }
+          }
+        }
+              
+  res.type('application/json')         
+  res.status(200).json(jsonRes)             
+})
+
 app.get('/sampleHook',(req,res)=>{
   console.log('sample hook : ' , req.query )
   broadcastWebhook(req.query.action || 'test')
