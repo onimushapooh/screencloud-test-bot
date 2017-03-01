@@ -165,6 +165,7 @@ app.post('/alexa.ai',(req,res)=>{
   var msg,lifespan
  
   console.log('Check Request : ',bodyReq)
+  console.log('Check Intent : ',bodyReq.intent.slots)
   // render
   // if(bodyReq.parameters.app == '') {
   //   msg = 'Sorry, i did not quite catch that'
