@@ -162,10 +162,28 @@ app.post('/api.ai',(req,res)=>{
 
 app.post('/alexa.ai',(req,res)=>{
   var bodyReq = req.body.request
-  var msg,lifespan
+  var msg,endSession = false
  
   console.log('Check Request : ',bodyReq)
-  console.log('Check Intent : ',bodyReq.intent.slots)
+  if(bodyReq.type=='LaunchRequest') {
+    msg = '<speak>Hi, I\'m screencloud how can i help?</speak>'
+    endSession = false
+  }else if(bodyReq.type=='IntentRequest') {
+    console.log('Check Intent : ',bodyReq.intent.slots)
+    if(bodyReq.intent.slots.actionsslot.value.length > 0) {
+      msg += bodyReq.intent.slots.actionsslot.value
+    }
+    if(bodyReq.intent.slots.appslot.value.length>0) {
+      msg += ' '+ bodyReq.intent.slots.appslot.value
+    }
+    msg = '<speak>'+msg+'</speak>'
+    endSession = true
+    var parameters = {"app":bodyReq.intent.slots.appslot.value,"any":bodyReq.intent.slots.any.value,"actions":bodyReq.intent.slots.actionsslot.value}
+    broadcastWebhook( JSON.stringify({params:parameters,message:bodyReq.intent.slots.any.value}) )
+  }else {
+    endSession = true
+  }
+  
   // render
   // if(bodyReq.parameters.app == '') {
   //   msg = 'Sorry, i did not quite catch that'
@@ -228,10 +246,10 @@ app.post('/alexa.ai',(req,res)=>{
           "version": "1.0",
           "sessionAttributes":{},
           "response": {
-            "shouldEndSession": true,
+            "shouldEndSession": endSession,
             "outputSpeech":{
               "type":"SSML",
-              "ssml":"<speak>Hi, I'm ScreenCloud. this response from service for test</speak>"
+              "ssml":msg
             }
           }
         }
