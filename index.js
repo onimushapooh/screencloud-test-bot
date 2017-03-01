@@ -162,7 +162,7 @@ app.post('/api.ai',(req,res)=>{
 
 app.post('/alexa.ai',(req,res)=>{
   var bodyReq = req.body.request
-  var msg,parameters,search_msg,endSession = false
+  var msg,parameters = {},search_msg,endSession = false
 
   console.log('Check Request : ',bodyReq)
   if(bodyReq.type=='LaunchRequest') {
@@ -190,13 +190,12 @@ app.post('/alexa.ai',(req,res)=>{
     }
 
     endSession = true
-    console.log('params = ',parameters)
 
     broadcastWebhook( JSON.stringify({params:parameters,message:search_msg}) )
   }else {
     endSession = true
   }
-  
+
   var jsonRes = {
           "version": "1.0",
           "sessionAttributes":{},
