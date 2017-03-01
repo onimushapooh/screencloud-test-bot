@@ -169,8 +169,9 @@ app.post('/alexa.ai',(req,res)=>{
     msg = '<speak>Hi, I\'m screencloud how can i help?</speak>'
     endSession = false
   }else if(bodyReq.type=='IntentRequest') {
+    console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent=='PlayApps') {
-      console.log('Check Intent : ',bodyReq.intent.slots)
+      
       if(bodyReq.intent.slots.actionsslot.value.length > 0) {
         msg += bodyReq.intent.slots.actionsslot.value
       }
@@ -192,6 +193,7 @@ app.post('/alexa.ai',(req,res)=>{
 
     msg = '<speak>'+msg+'</speak>'
     endSession = true
+    console.log('params = ',parameters)
     
     broadcastWebhook( JSON.stringify({params:parameters,message:bodyReq.intent.slots.any.value}) )
   }else {
