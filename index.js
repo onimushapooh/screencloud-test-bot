@@ -162,102 +162,41 @@ app.post('/api.ai',(req,res)=>{
 
 app.post('/alexa.ai',(req,res)=>{
   var bodyReq = req.body.request
-  var msg,endSession = false
-  var parameters
+  var msg,parameters,search_msg,endSession = false
+
   console.log('Check Request : ',bodyReq)
   if(bodyReq.type=='LaunchRequest') {
     msg = '<speak>Hi, I\'m screencloud how can i help?</speak>'
     endSession = false
   }else if(bodyReq.type=='IntentRequest') {
     console.log('Check Intent : ',bodyReq.intent.slots)
-    if(bodyReq.intent=='PlayApps') {
-      
-      if(bodyReq.intent.slots.actionsslot.value.length > 0) {
-        msg += bodyReq.intent.slots.actionsslot.value
-      }
-      if(bodyReq.intent.slots.appslot.value.length>0) {
-        msg += ' '+ bodyReq.intent.slots.appslot.value
-      }
+    if(bodyReq.intent=='OpenApps') {
       parameters = {"app":bodyReq.intent.slots.appslot.value,
-                  "any":bodyReq.intent.slots.any.value,
                   "actions":bodyReq.intent.slots.actionsslot.value
                 }
+      msg = "<speak>Open "+bodyReq.intent.slots.appslot.value+"</speak>"
+      search_msg = ''      
                 
-    }else if(bodyReq.intent=='PlayVideo') {
-      msg = 'play '+ bodyReq.intent.slots.any.value + ' video on youtube'
-      parameters = {"app":'youtube',
+    }else if(bodyReq.intent=='PlayLimit') {
+
+      parameters = {"app":bodyReq.intent.slots.appspecific.value,
+                  "geo-city":bodyReq.intent.slots.city.value,
                   "any":bodyReq.intent.slots.any.value,
-                  "actions":'play'
-                  }
+                  "actions":"display"
+                }
+      
+      search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.any.value          
+      msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
     }
 
-    msg = '<speak>'+msg+'</speak>'
     endSession = true
     console.log('params = ',parameters)
-    
-    broadcastWebhook( JSON.stringify({params:parameters,message:bodyReq.intent.slots.any.value}) )
+
+    broadcastWebhook( JSON.stringify({params:parameters,message:search_msg}) )
   }else {
     endSession = true
   }
   
-  // render
-  // if(bodyReq.parameters.app == '') {
-  //   msg = 'Sorry, i did not quite catch that'
-  // }else {
-  //   msg = bodyReq.resolvedQuery
-  //   search_msg = msg.replace(new RegExp(bodyReq.parameters.actions+'|'+bodyReq.parameters.app+'|show', 'gi'), '')
-  //   switch ( bodyReq.parameters.app ) {
-  //     case 'youtube':
-  //       search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
-  //       break;
-  //     case 'message':
-  //       break;
-  //     case 'nba':
-  //       break;
-  //     case 'nfl':
-  //       break;
-  //     case 'epl':
-  //       break;
-  //     case 'time':
-  //       search_msg = search_msg.replace(new RegExp('current|in', 'gi'), '');
-	//      break;  
-  //     case 'weather':
-  //       search_msg = search_msg.replace(new RegExp('in', 'gi'), '');
-	// 			break;
-  //     case 'slack':
-  //       break;
-  //     case 'trello':
-  //       break;
-  //     case 'instagram':
-  //       search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
-  //       search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
-  //       break;  
-  //     case 'skynews':		
-  //       break;       
-  //     default:
-        
-  //   }
-    
-  //   if(bodyReq.parameters.any != '' || bodyReq.parameters.any.length > 0) {
-  //     search_msg = bodyReq.parameters.any
-  //     if(bodyReq.parameters.app=='instagram') {
-  //       search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
-  //     }
-  //     console.log('new message = ',search_msg)
-  //   }else if(bodyReq.parameters['geo-city'].length > 0) {
-  //     search_msg = bodyReq.parameters['geo-city']
-  //     console.log('city message = ',search_msg)
-  //   }else {
-  //     console.log('fallback msg = ',search_msg)
-  //   }
-
-  //   broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
-  // }
-
-  // var slack_message = {
-  //   "text": msg,
-  // }
-
   var jsonRes = {
           "version": "1.0",
           "sessionAttributes":{},
