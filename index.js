@@ -163,22 +163,36 @@ app.post('/api.ai',(req,res)=>{
 app.post('/alexa.ai',(req,res)=>{
   var bodyReq = req.body.request
   var msg,endSession = false
- 
+  var parameters
   console.log('Check Request : ',bodyReq)
   if(bodyReq.type=='LaunchRequest') {
     msg = '<speak>Hi, I\'m screencloud how can i help?</speak>'
     endSession = false
   }else if(bodyReq.type=='IntentRequest') {
-    console.log('Check Intent : ',bodyReq.intent.slots)
-    if(bodyReq.intent.slots.actionsslot.value.length > 0) {
-      msg += bodyReq.intent.slots.actionsslot.value
+    if(bodyReq.intent=='PlayApps') {
+      console.log('Check Intent : ',bodyReq.intent.slots)
+      if(bodyReq.intent.slots.actionsslot.value.length > 0) {
+        msg += bodyReq.intent.slots.actionsslot.value
+      }
+      if(bodyReq.intent.slots.appslot.value.length>0) {
+        msg += ' '+ bodyReq.intent.slots.appslot.value
+      }
+      parameters = {"app":bodyReq.intent.slots.appslot.value,
+                  "any":bodyReq.intent.slots.any.value,
+                  "actions":bodyReq.intent.slots.actionsslot.value
+                }
+                
+    }else if(bodyReq.intent=='PlayVideo') {
+      msg = 'play '+ bodyReq.intent.slots.any.value + ' video on youtube'
+      parameters = {"app":'youtube',
+                  "any":bodyReq.intent.slots.any.value,
+                  "actions":'play'
+                  }
     }
-    if(bodyReq.intent.slots.appslot.value.length>0) {
-      msg += ' '+ bodyReq.intent.slots.appslot.value
-    }
+
     msg = '<speak>'+msg+'</speak>'
     endSession = true
-    var parameters = {"app":bodyReq.intent.slots.appslot.value,"any":bodyReq.intent.slots.any.value,"actions":bodyReq.intent.slots.actionsslot.value}
+    
     broadcastWebhook( JSON.stringify({params:parameters,message:bodyReq.intent.slots.any.value}) )
   }else {
     endSession = true
