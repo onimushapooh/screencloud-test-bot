@@ -170,7 +170,7 @@ app.post('/alexa.ai',(req,res)=>{
     endSession = false
   }else if(bodyReq.type=='IntentRequest') {
     console.log('Check Intent : ',bodyReq.intent.slots)
-    if(bodyReq.intent=='OpenApps') {
+    if(bodyReq.intent.name=='OpenApps') {
       params = {"app":bodyReq.intent.slots.appslot.value,
                   "actions":bodyReq.intent.slots.actionsslot.value
                 }
@@ -178,7 +178,7 @@ app.post('/alexa.ai',(req,res)=>{
       msg = "<speak>Open "+bodyReq.intent.slots.appslot.value+"</speak>"
       search_msg = ''      
       console.log('OpenApps params = ',params)          
-    }else if(bodyReq.intent=='PlayLimit') {
+    }else if(bodyReq.intent.name=='PlayLimit') {
 
       params = {"app":bodyReq.intent.slots.appspecific.value,
                   "geo-city":bodyReq.intent.slots.city.value,
