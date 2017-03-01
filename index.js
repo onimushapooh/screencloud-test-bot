@@ -162,7 +162,7 @@ app.post('/api.ai',(req,res)=>{
 
 app.post('/alexa.ai',(req,res)=>{
   var bodyReq = req.body.request
-  var msg,parameters = {},search_msg,endSession = false
+  var msg,params = {},search_msg,endSession = false
 
   console.log('Check Request : ',bodyReq)
   if(bodyReq.type=='LaunchRequest') {
@@ -171,27 +171,28 @@ app.post('/alexa.ai',(req,res)=>{
   }else if(bodyReq.type=='IntentRequest') {
     console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent=='OpenApps') {
-      parameters = {"app":bodyReq.intent.slots.appslot.value,
+      params = {"app":bodyReq.intent.slots.appslot.value,
                   "actions":bodyReq.intent.slots.actionsslot.value
                 }
+
       msg = "<speak>Open "+bodyReq.intent.slots.appslot.value+"</speak>"
       search_msg = ''      
-                
+      console.log('OpenApps params = ',params)          
     }else if(bodyReq.intent=='PlayLimit') {
 
-      parameters = {"app":bodyReq.intent.slots.appspecific.value,
+      params = {"app":bodyReq.intent.slots.appspecific.value,
                   "geo-city":bodyReq.intent.slots.city.value,
                   "any":bodyReq.intent.slots.any.value,
                   "actions":"display"
                 }
-      
+      console.log('PlayLimit params = ',params)  
       search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.any.value          
       msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
     }
 
     endSession = true
 
-    broadcastWebhook( JSON.stringify({params:parameters,message:search_msg}) )
+    broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
   }else {
     endSession = true
   }
