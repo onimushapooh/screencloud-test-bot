@@ -173,7 +173,7 @@ app.post('/alexa.ai',(req,res)=>{
     console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent.name=='OpenApps') {
       params = {"app":bodyReq.intent.slots.appslot.value,
-                  "actions":bodyReq.intent.slots.actionsslot.value,
+                  "actions":'Open',
                   "voice":"amazon"
                 }
 
@@ -190,6 +190,16 @@ app.post('/alexa.ai',(req,res)=>{
                 }
       console.log('PlayLimit params = ',params)  
       search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.any.value          
+      msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
+    }else if(bodyReq.intent.name=='OpenWords') {
+      params = {"app":bodyReq.intent.slots.appspecific.value,
+                  "geo-city":'',
+                  "any":bodyReq.intent.slots.appwords.value,
+                  "actions":"display",
+                  "voice":"amazon"
+                }
+      console.log('PlayLimit params = ',params)  
+      search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.appwords.value          
       msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
     }
 
