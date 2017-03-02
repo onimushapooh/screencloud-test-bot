@@ -140,8 +140,9 @@ app.post('/api.ai',(req,res)=>{
     }else {
       console.log('fallback msg = ',search_msg)
     }
-
-    broadcastWebhook( JSON.stringify({params:bodyReq.parameters,message:search_msg}) )
+    var params = bodyReq.parameters
+    params.voice = 'google'
+    broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
   }
 
   var slack_message = {
@@ -172,7 +173,8 @@ app.post('/alexa.ai',(req,res)=>{
     console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent.name=='OpenApps') {
       params = {"app":bodyReq.intent.slots.appslot.value,
-                  "actions":bodyReq.intent.slots.actionsslot.value
+                  "actions":bodyReq.intent.slots.actionsslot.value,
+                  "voice":"amazon"
                 }
 
       msg = "<speak>Open "+bodyReq.intent.slots.appslot.value+"</speak>"
@@ -183,7 +185,8 @@ app.post('/alexa.ai',(req,res)=>{
       params = {"app":bodyReq.intent.slots.appspecific.value,
                   "geo-city":bodyReq.intent.slots.city.value,
                   "any":bodyReq.intent.slots.any.value,
-                  "actions":"display"
+                  "actions":"display",
+                  "voice":"amazon"
                 }
       console.log('PlayLimit params = ',params)  
       search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.any.value          
