@@ -189,19 +189,20 @@ app.post('/alexa.ai',(req,res)=>{
                   "voice":"amazon"
                 }
       console.log('PlayLimit params = ',params)  
-      msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
+      msg = "<speak>Display "+search_msg+" on "+bodyReq.intent.slots.appspecific.value+"</speak>"
 
     }else if(bodyReq.intent.name=='OpenWords') {
+      search_msg = bodyReq.intent.slots.appwords.value  
 
       params = {"app":bodyReq.intent.slots.appspecific.value,
                   "geo-city":'',
-                  "any":bodyReq.intent.slots.appwords.value,
+                  "any":search_msg,
                   "actions":"display",
                   "voice":"amazon"
                 }
       console.log('OpenWords params = ',params)  
-      search_msg = bodyReq.intent.slots.appwords.value          
-      msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
+              
+      msg = "<speak>Show "+search_msg+" on "+bodyReq.intent.slots.appspecific.value+"</speak>"
 
     }else if(bodyReq.intent.name=='PlaceAndLocal') {
 
@@ -221,6 +222,22 @@ app.post('/alexa.ai',(req,res)=>{
       console.log('PlaceAndLocal params = ',params)  
 
       msg = "<speak>Show "+bodyReq.intent.slots.appplace.value+" in "+search_msg+"</speak>"
+
+    }else if(bodyReq.intent.name=='OpenMessage') {
+
+      search_msg = (typeof bodyReq.intent.slots.anymessage.value != 'undefined') ? bodyReq.intent.slots.anymessage.value : ''
+
+      search_msg = search_msg.trim()
+
+      params = {"app":bodyReq.intent.slots.appmessage.value,
+                  "geo-city":'',
+                  "any":search_msg,
+                  "actions":"Show",
+                  "voice":"amazon"
+                }
+      console.log('OpenMessage params = ',params)  
+
+      msg = "<speak>Show "+search_msg+" in "+bodyReq.intent.slots.appmessage.value+"</speak>"
 
     }
 
