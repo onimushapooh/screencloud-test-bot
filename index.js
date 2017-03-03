@@ -208,6 +208,7 @@ app.post('/alexa.ai',(req,res)=>{
       search_msg = (typeof bodyReq.intent.slots.uscity.value != 'undefined') ? bodyReq.intent.slots.uscity.value : ' '
       search_msg += (typeof bodyReq.intent.slots.europecity.value != 'undefined') ? bodyReq.intent.slots.europecity.value : ' '
       search_msg += (typeof bodyReq.intent.slots.city.value != 'undefined') ? bodyReq.intent.slots.city.value : ' '
+      search_msg = (typeof bodyReq.intent.slots.country.value != 'undefined') ? search_msg+' '+ bodyReq.intent.slots.country.value : search_msg
 
       search_msg = search_msg.trim()
 
@@ -218,7 +219,7 @@ app.post('/alexa.ai',(req,res)=>{
                   "voice":"amazon"
                 }
       console.log('PlaceAndLocal params = ',params)  
-      
+
       msg = "<speak>Show "+bodyReq.intent.slots.appplace.value+" in "+search_msg+"</speak>"
 
     }
