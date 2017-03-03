@@ -218,8 +218,7 @@ app.post('/alexa.ai',(req,res)=>{
                   "voice":"amazon"
                 }
       console.log('PlaceAndLocal params = ',params)  
-
-      search_msg = bodyReq.intent.slots.appwords.value
+      
       msg = "<speak>Show "+bodyReq.intent.slots.appplace.value+" in "+search_msg+"</speak>"
 
     }
