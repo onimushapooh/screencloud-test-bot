@@ -237,7 +237,7 @@ app.post('/alexa.ai',(req,res)=>{
                 }
       console.log('OpenMessage params = ',params)  
 
-      msg = "<speak>Show "+search_msg+" in "+bodyReq.intent.slots.appmessage.value+"</speak>"
+      msg = "<speak>Show "+search_msg+" on "+bodyReq.intent.slots.appmessage.value+"</speak>"
 
     }
 
