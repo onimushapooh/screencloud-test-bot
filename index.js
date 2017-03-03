@@ -198,8 +198,8 @@ app.post('/alexa.ai',(req,res)=>{
                   "actions":"display",
                   "voice":"amazon"
                 }
-      console.log('PlayLimit params = ',params)  
-      search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.appwords.value          
+      console.log('OpenWords params = ',params)  
+      search_msg = bodyReq.intent.slots.appwords.value          
       msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
     }
 
