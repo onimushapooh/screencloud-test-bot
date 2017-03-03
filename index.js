@@ -181,17 +181,18 @@ app.post('/alexa.ai',(req,res)=>{
       search_msg = ''      
       console.log('OpenApps params = ',params)          
     }else if(bodyReq.intent.name=='PlayLimit') {
-
+      search_msg = bodyReq.intent.slots.any.value 
       params = {"app":bodyReq.intent.slots.appspecific.value,
-                  "geo-city":bodyReq.intent.slots.city.value,
-                  "any":bodyReq.intent.slots.any.value,
+                  "geo-city":'',
+                  "any":search_msg,
                   "actions":"display",
                   "voice":"amazon"
                 }
       console.log('PlayLimit params = ',params)  
-      search_msg = (typeof bodyReq.intent.slots.city.value != 'undefined')? bodyReq.intent.slots.city.value: bodyReq.intent.slots.any.value          
       msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
+
     }else if(bodyReq.intent.name=='OpenWords') {
+
       params = {"app":bodyReq.intent.slots.appspecific.value,
                   "geo-city":'',
                   "any":bodyReq.intent.slots.appwords.value,
@@ -201,6 +202,26 @@ app.post('/alexa.ai',(req,res)=>{
       console.log('OpenWords params = ',params)  
       search_msg = bodyReq.intent.slots.appwords.value          
       msg = "<speak>Display "+bodyReq.intent.slots.appspecific.value+" "+search_msg+"</speak>"
+
+    }else if(bodyReq.intent.name=='PlaceAndLocal') {
+
+      search_msg = (typeof bodyReq.intent.slots.uscity.value != 'undefined') ? bodyReq.intent.slots.uscity.value : ' '
+      search_msg += (typeof bodyReq.intent.slots.europecity.value != 'undefined') ? bodyReq.intent.slots.europecity.value : ' '
+      search_msg += (typeof bodyReq.intent.slots.city.value != 'undefined') ? bodyReq.intent.slots.city.value : ' '
+
+      search_msg = search_msg.trim()
+
+      params = {"app":bodyReq.intent.slots.appplace.value,
+                  "geo-city":search_msg,
+                  "any":'',
+                  "actions":"Show",
+                  "voice":"amazon"
+                }
+      console.log('PlaceAndLocal params = ',params)  
+
+      search_msg = bodyReq.intent.slots.appwords.value
+      msg = "<speak>Show "+bodyReq.intent.slots.appplace.value+" in "+search_msg+"</speak>"
+
     }
 
     endSession = true
