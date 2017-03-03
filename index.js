@@ -181,7 +181,7 @@ app.post('/alexa.ai',(req,res)=>{
       search_msg = ''      
       console.log('OpenApps params = ',params)          
     }else if(bodyReq.intent.name=='PlayLimit') {
-      search_msg = bodyReq.intent.slots.any.value 
+      search_msg = (typeof bodyReq.intent.slots.any.value != 'undefined')? bodyReq.intent.slots.any.value : bodyReq.intent.slots.instahash.value
       params = {"app":bodyReq.intent.slots.appspecific.value,
                   "geo-city":'',
                   "any":search_msg,
