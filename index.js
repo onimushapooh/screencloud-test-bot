@@ -195,8 +195,8 @@ app.post('/alexa.ai',(req,res)=>{
 
     }else if(bodyReq.intent.name=='OpenWords') {
       search_msg = bodyReq.intent.slots.appwords.value  
-
-      params = {"app":bodyReq.intent.slots.appspecific.value,
+      var appName = (bodyReq.intent.slots.appspecific.value=='U2') ? 'Youtube': bodyReq.intent.slots.appspecific.value
+      params = {"app":appName,
                   "geo-city":'',
                   "any":search_msg,
                   "actions":"display",
