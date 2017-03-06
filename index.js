@@ -15,6 +15,7 @@ var WebSocketServer = require('uws').Server
 
 
 var googleWSConnections = {}
+var amazonWSConnections = {}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -173,6 +174,9 @@ app.post('/alexa.ai',(req,res)=>{
     console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent.name=='OpenApps') {
       var appName = (bodyReq.intent.slots.appslot.value=='premier league' || bodyReq.intent.slots.appslot.value =='soccer' || bodyReq.intent.slots.appslot.value=='football') ? 'epl':bodyReq.intent.slots.appslot.value
+
+      appName = (bodyReq.intent.slots.appslot.value=='live news' || bodyReq.intent.slots.appslot.value=='livenews') ? 'nasa' : bodyReq.intent.slots.appslot.value
+
       params = {"app":appName,
                   "actions":'Open',
                   "voice":"amazon"
@@ -245,7 +249,7 @@ app.post('/alexa.ai',(req,res)=>{
 
     endSession = true
 
-    broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
+    broadcastAmazonAlexa( JSON.stringify({params:params,message:search_msg}) )
   }else {
     endSession = true
   }
@@ -284,6 +288,7 @@ var server = http.createServer(app).listen(process.env.PORT,function(){
 
 var wss = new WebSocketServer({ server })
 
+
 function broadcastWebhook (message) {
   var wsClientKeys = Object.keys(googleWSConnections)
   console.log('wsClientKeys = ', wsClientKeys)
@@ -298,6 +303,20 @@ function broadcastWebhook (message) {
   })
 }
 
+function broadcastAmazonAlexa (message) {
+  var wsClientKeys = Object.keys(amazonWSConnections)
+  console.log('wsClientKeys = ', wsClientKeys)
+  wsClientKeys.map( (clientKey) => {
+    var ws = amazonWSConnections[clientKey]
+    try {
+      ws.send(message)
+    } catch ( e ){
+      console.log('can not send message to client : ' + clientKey, e)
+      delete amazonWSConnections[clientKey]
+    }
+  })
+}
+
 function connectWS (ws, clientKey) {
   console.log('clientKey = ', clientKey)
 }
@@ -305,16 +324,28 @@ function connectWS (ws, clientKey) {
 wss.on('connection', function (ws) {
   console.log('[wss] connection', ws)
   var clientKey = ''
+  var clientName = ''
 
   ws.once('message', (message)=>{
     console.log('msg = ', message)
     var jsonMsg = JSON.parse(message)
     clientKey = jsonMsg.clientKey
-    googleWSConnections[clientKey] = ws 
+    clientName = jsonMsg.clientName
+    if(clientName=='google') {
+      googleWSConnections[clientKey] = ws 
+    }else {
+      amazonWSConnections[clientKey] = ws
+    }
+    
   });
 
   ws.once('close', ()=> {
     console.log('client is close : ', clientKey)
-    delete googleWSConnections[clientKey]
+    if(clientName=='google') {
+      delete googleWSConnections[clientKey]
+    }else {
+      delete amazonWSConnections[clientKey]
+    }
+    
   })
 })
