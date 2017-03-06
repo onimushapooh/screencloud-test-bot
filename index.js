@@ -173,7 +173,7 @@ app.post('/alexa.ai',(req,res)=>{
     console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent.name=='OpenApps') {
       var appName = (bodyReq.intent.slots.appslot.value=='premier league' || bodyReq.intent.slots.appslot.value =='soccer' || bodyReq.intent.slots.appslot.value=='football') ? 'epl':bodyReq.intent.slots.appslot.value
-      params = {"app":bodyReq.intent.slots.appslot.value,
+      params = {"app":appName,
                   "actions":'Open',
                   "voice":"amazon"
                 }
@@ -183,7 +183,8 @@ app.post('/alexa.ai',(req,res)=>{
       console.log('OpenApps params = ',params)          
     }else if(bodyReq.intent.name=='PlayLimit') {
       search_msg = (typeof bodyReq.intent.slots.any.value != 'undefined')? bodyReq.intent.slots.any.value : bodyReq.intent.slots.instahash.value
-      params = {"app":bodyReq.intent.slots.appspecific.value,
+      var appName = (bodyReq.intent.slots.appspecific.value=='U2') ? 'Youtube': bodyReq.intent.slots.appspecific.value
+      params = {"app":appName,
                   "geo-city":'',
                   "any":search_msg,
                   "actions":"display",
