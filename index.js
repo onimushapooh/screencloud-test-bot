@@ -172,6 +172,7 @@ app.post('/alexa.ai',(req,res)=>{
   }else if(bodyReq.type=='IntentRequest') {
     console.log('Check Intent : ',bodyReq.intent.slots)
     if(bodyReq.intent.name=='OpenApps') {
+      var appName = (bodyReq.intent.slots.appslot.value=='premier league' || bodyReq.intent.slots.appslot.value =='soccer' || bodyReq.intent.slots.appslot.value=='football') ? 'epl':bodyReq.intent.slots.appslot.value
       params = {"app":bodyReq.intent.slots.appslot.value,
                   "actions":'Open',
                   "voice":"amazon"
