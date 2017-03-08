@@ -90,7 +90,7 @@ app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
   var msg,lifespan
  
-  console.log('Check Request : ',bodyReq)
+  console.log('Check Request : ',req.body)
   // render
   if(bodyReq.parameters.app == '') {
     msg = 'Sorry, i did not quite catch that'
