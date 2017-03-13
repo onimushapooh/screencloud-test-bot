@@ -12,6 +12,8 @@ const bodyParser = require('body-parser')
 const app = express()
 // const api = express()
 var WebSocketServer = require('uws').Server
+var Redis = require('ioredis');
+var redis = new Redis();
 
 
 var googleWSConnections = {}
@@ -88,8 +90,8 @@ app.get('/',(req,res)=>{
 // })
 app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
-  var msg,lifespan
- 
+  var msg,lifespan,invalidapp = false
+  var fallback_data
   console.log('Check Request : ',req.body)
   // render
   if(bodyReq.parameters.app == '') {
@@ -101,12 +103,16 @@ app.post('/api.ai',(req,res)=>{
       case 'youtube':
         search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
         break;
+      case 'notice':  
       case 'message':
         break;
       case 'nba':
         break;
       case 'nfl':
         break;
+      case 'premier league':
+      case 'soccer':
+      case 'football':  
       case 'epl':
         break;
       case 'time':
@@ -123,12 +129,16 @@ app.post('/api.ai',(req,res)=>{
         search_msg = search_msg.replace(new RegExp('of|on', 'gi'), '');
         search_msg = search_msg.replace(new RegExp(' ', 'gi'), '');
         break;  
+      case 'sky news':  
       case 'skynews':		
-        break;       
+        break; 
+      case 'stock':
+        break        
       default:
-        
+        // invalidapp = true;
+        break;
     }
-    
+
     if(bodyReq.parameters.any != '' || bodyReq.parameters.any.length > 0) {
       search_msg = bodyReq.parameters.any
       if(bodyReq.parameters.app=='instagram') {
@@ -143,7 +153,17 @@ app.post('/api.ai',(req,res)=>{
     }
     var params = bodyReq.parameters
     params.voice = 'google'
-    broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
+    if(typeof bodyReq.parameters.app == 'undefined' || bodyReq.parameters.app.length == 0) {
+      invalidapp = true
+      // Or using a promise if the last argument isn't a function
+      redis.get('google_voice').then(function (result) {
+        broadcastWebhook( JSON.stringify(result) )
+      });
+    }else {
+      redis.set({params:params,message:search_msg}, 'google_voice');
+      broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
+    }
+    
   }
 
   var slack_message = {
@@ -161,6 +181,7 @@ app.post('/api.ai',(req,res)=>{
   res.type('application/json')         
   res.status(200).json(jsonRes)             
 })
+
 
 app.post('/alexa.ai',(req,res)=>{
   var bodyReq = req.body.request
@@ -249,7 +270,20 @@ app.post('/alexa.ai',(req,res)=>{
 
     endSession = true
 
-    broadcastAmazonAlexa( JSON.stringify({params:params,message:search_msg}) )
+    if(typeof params.app == 'undefined') {
+      redis.get('amazon_voice').then(function (result) {
+        console.log('amazon voice = ',result);
+        msg = "<speak>Show "+result.message+" on "+result.params.app+"</speak>"
+        broadcastWebhook( JSON.stringify(result) )
+      });
+
+    }else {
+      
+      redis.set({params:params,message:search_msg}, 'amazon_voice');
+      broadcastAmazonAlexa( JSON.stringify({params:params,message:search_msg}) )
+    }
+
+    
   }else {
     endSession = true
   }
