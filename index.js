@@ -272,7 +272,8 @@ app.post('/alexa.ai',(req,res)=>{
     if(typeof params.app == 'undefined') {
       redis.get('amazon_voice').then(function (result) {
         console.log('amazon voice = ',result);
-        msg = "<speak>Show "+result.message+" on "+result.params.app+"</speak>"
+        let tmpParams = JSON.parse(result)
+        msg = "<speak>Show "+tmpParams.message+" on "+tmpParams.params.app+"</speak>"
         broadcastWebhook(result)
       });
 
