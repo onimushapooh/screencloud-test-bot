@@ -13,8 +13,7 @@ const app = express()
 // const api = express()
 var WebSocketServer = require('uws').Server
 var Redis = require('ioredis');
-var redis = new Redis();
-
+var redis = new Redis(process.env.REDIS_URL);
 
 var googleWSConnections = {}
 var amazonWSConnections = {}
@@ -157,10 +156,10 @@ app.post('/api.ai',(req,res)=>{
       invalidapp = true
       // Or using a promise if the last argument isn't a function
       redis.get('google_voice').then(function (result) {
-        broadcastWebhook( JSON.stringify(result) )
+        broadcastWebhook(result)
       });
     }else {
-      redis.set({params:params,message:search_msg}, 'google_voice');
+      redis.set('google_voice',JSON.stringify({params:params,message:search_msg}));
       broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
     }
     
@@ -274,12 +273,12 @@ app.post('/alexa.ai',(req,res)=>{
       redis.get('amazon_voice').then(function (result) {
         console.log('amazon voice = ',result);
         msg = "<speak>Show "+result.message+" on "+result.params.app+"</speak>"
-        broadcastWebhook( JSON.stringify(result) )
+        broadcastWebhook(result)
       });
 
     }else {
       
-      redis.set({params:params,message:search_msg}, 'amazon_voice');
+      redis.set('amazon_voice',JSON.stringify({params:params,message:search_msg}));
       broadcastAmazonAlexa( JSON.stringify({params:params,message:search_msg}) )
     }
 
