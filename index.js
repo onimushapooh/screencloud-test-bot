@@ -17,6 +17,8 @@ var redis = new Redis(process.env.REDIS_URL);
 
 var googleWSConnections = {}
 var amazonWSConnections = {}
+var appsList = ['youtube','notice','message','nba','nfl','football','soccer','epl','premier league','time','weather','skynews','board','trello','slack','facebook','twitter','instagram','giphy','bbc',
+'cnn','techcrunch','stock','livenews','nasa']
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -269,7 +271,7 @@ app.post('/alexa.ai',(req,res)=>{
 
     endSession = true
 
-    if(typeof params.app == 'undefined') {
+    if(typeof params.app == 'undefined' || appslot.includes(params.app)==false) {
       redis.get('amazon_voice').then(function (result) {
         console.log('amazon voice = ',result);
         let tmpParams = JSON.parse(result)
