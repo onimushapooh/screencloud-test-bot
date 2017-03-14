@@ -16,7 +16,7 @@ var Redis = require('ioredis');
 var redis = new Redis(process.env.REDIS_URL);
 
 var crypto = require('crypto'),
-    algorithm = 'aes-128-ctr',
+    algorithm = 'aes128',
     password = 'abscdefg';
 
 var googleWSConnections = {}
