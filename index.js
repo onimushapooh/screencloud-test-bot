@@ -16,7 +16,7 @@ var Redis = require('ioredis');
 var redis = new Redis(process.env.REDIS_URL);
 
 var crypto = require('crypto'),
-    algorithm = 'aes-256-ctr',
+    algorithm = 'aes-128-ctr',
     password = 'abscdefg';
 
 var googleWSConnections = {}
@@ -59,7 +59,7 @@ app.get('/oauth',(req,res)=>{
   var client_id = req.query.client_id
   var client_key = 'screencloud-test-service-only'  //new Date().getTime()
   var authorization_code = encrypt(client_id+'-'+client_key)
-  var redirect_url = req.query.redirect_uri+'?code='+authorization_code+'&state='+req.query.state
+  var redirect_url = req.query.redirect_uri+'#access_token='+authorization_code+'&token_type=bearer&state='+req.query.state
   console.log('redirect url = ',redirect_url)
 
   res.redirect(redirect_url)
