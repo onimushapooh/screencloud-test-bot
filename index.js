@@ -26,14 +26,14 @@ var appsList = ['youtube','notice','message','nba','nfl','football','soccer','ep
 
 function encrypt(text){
   var cipher = crypto.createCipher(algorithm,password)
-  var crypted = cipher.update(text,'utf8','hex')
-  crypted += cipher.final('hex');
+  var crypted = cipher.update(text,'utf8','base64')
+  crypted += cipher.final('base64');
   return crypted;
 }
  
 function decrypt(text){
   var decipher = crypto.createDecipher(algorithm,password)
-  var dec = decipher.update(text,'hex','utf8')
+  var dec = decipher.update(text,'base64','utf8')
   dec += decipher.final('utf8');
   return dec;
 }
