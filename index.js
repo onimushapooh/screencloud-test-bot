@@ -15,10 +15,28 @@ var WebSocketServer = require('uws').Server
 var Redis = require('ioredis');
 var redis = new Redis(process.env.REDIS_URL);
 
+var crypto = require('crypto'),
+    algorithm = 'aes-256-ctr',
+    password = 'abscdefg';
+
 var googleWSConnections = {}
 var amazonWSConnections = {}
 var appsList = ['youtube','notice','message','nba','nfl','football','soccer','epl','premier league','time','weather','skynews','board','trello','slack','facebook','twitter','instagram','giphy','bbc',
 'cnn','techcrunch','stock','livenews','nasa']
+
+function encrypt(text){
+  var cipher = crypto.createCipher(algorithm,password)
+  var crypted = cipher.update(text,'utf8','hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+ 
+function decrypt(text){
+  var decipher = crypto.createDecipher(algorithm,password)
+  var dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -37,58 +55,15 @@ app.get('/',(req,res)=>{
   res.status(200).send('server OK!!')
 })
 
-// app.post('/api.ai',(req,res)=>{
-//   var bodyReq = req.body.result
-//   var msg,lifespan
-//   if(bodyReq.parameters.screen=='screen' || (bodyReq.parameters.app.length == 0 && bodyReq.parameters.screen.length == 0)) {
-//     msg = 'Which screen do you want?'
-//     lifespan = 4
-//   }else if((bodyReq.parameters.app.length == 0 && bodyReq.parameters.playlist.length == 0) && bodyReq.parameters.screen.length != 0 ) {
-//     msg = 'Which app do you want to show on '+bodyReq.parameters.screen+'?'
-//     lifespan = 4
-//   }else if(bodyReq.parameters.playlist.length != 0 && bodyReq.parameters.screen.length != 0){
-//     if(bodyReq.contexts.length>0) {
-//       let context = bodyReq.contexts[0]
-//       msg = 'Show '+context.parameters['playlist']+' on '+context.parameters['screen']
-//       lifespan = 1
-//     }else {
-//       msg = 'I dont understand that.'
-//       lifespan = 4
-//     }
-//   }else {
-//     if(bodyReq.contexts.length>0) {
-//       let context = bodyReq.contexts[0]
-//       msg = 'Show '+context.parameters['app']+' on '+context.parameters['screen']
-//       lifespan = 1
-//     }else {
-//       msg = 'I dont understand that.'
-//       lifespan = 4
-//     }
-    
-//   }
-
-//   console.log('Check Request : ',bodyReq)
+app.get('/oauth',(req,res)=>{
+  var client_id = req.query.client_id
+  var client_key = 'screencloud-test-service-only'  //new Date().getTime()
+  var authorization_code = encrypt(client_id+'-'+client_key)
+  var redirect_url = req.query.redirect_uri+'?code='+authorization_code+'&result_code=SUCCESS'
   
-//   bodyReq.contexts.forEach(function(element) {
-//     console.log('context :: ',element.parameters)  
-//   }, this);
-  
-//   var slack_message = {
-//     "text": msg,
-//   }
-//   // render
+  res.redirect(redirect_url)
+})
 
-//    var jsonRes = {
-//             "speech": msg,
-//             "displayText": msg,
-//             "data":  {"slack":slack_message},
-//             "contextOut": [{"name":"ScreenCloud", "lifespan":lifespan, "parameters":{"app":bodyReq.parameters.app,"screen":bodyReq.parameters.screen,"playlist":bodyReq.parameters.playlist}}],
-//             "source": "ScreenCloud"
-//             }
-              
-//    res.type('application/json')         
-//    res.status(200).json(jsonRes)             
-// })
 app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
   var msg,lifespan,invalidapp = false
