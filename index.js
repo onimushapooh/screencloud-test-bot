@@ -59,9 +59,9 @@ app.get('/oauth',(req,res)=>{
   var client_id = req.query.client_id
   var client_key = 'screencloud-test-service-only'  //new Date().getTime()
   var authorization_code = encrypt(client_id+'-'+client_key)
-  var redirect_url = req.query.redirect_uri+'?code='+authorization_code+'&result_code=SUCCESS&state='+req.query.state
+  var redirect_url = req.query.redirect_uri+'?code='+authorization_code+'&state='+req.query.state
   console.log('redirect url = ',redirect_url)
-  
+
   res.redirect(redirect_url)
 })
 
