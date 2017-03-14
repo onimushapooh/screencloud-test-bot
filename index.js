@@ -69,8 +69,9 @@ app.post('/api.ai',(req,res)=>{
   var bodyReq = req.body.result
   var msg,lifespan,invalidapp = false
   var fallback_data
-  console.log('Check Request : ',req.body)
+  console.log('Check Request : ',bodyReq)
   // render
+  console.log('orignal REQ = ',req.body.originalRequest)
   if(bodyReq.parameters.app == '') {
     msg = 'Sorry, i did not quite catch that'
   }else {
