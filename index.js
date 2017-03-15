@@ -11,6 +11,7 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const app = express()
+// const exphbs = require('express-handlebars')
 
 // const api = express()
 var WebSocketServer = require('uws').Server
@@ -25,8 +26,6 @@ var googleWSConnections = {}
 var amazonWSConnections = {}
 var appsList = ['youtube','notice','message','nba','nfl','football','soccer','epl','premier league','time','weather','skynews','board','trello','slack','facebook','twitter','instagram','giphy','bbc',
 'cnn','techcrunch','stock','livenews','nasa']
-
-const exphbs = require('express-handlebars')
 
 function encrypt(text){
   var cipher = crypto.createCipher(algorithm,password)
