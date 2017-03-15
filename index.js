@@ -46,16 +46,16 @@ function randomString(length) {
     return result;
 }
 
-var CheckKeyExist = function(oauth_code){
-  return redis.get(oauth_code).then(function (result) {
-      if(result=='' || result.length == 0 ) {
-        return oauth_code
-      }else {
-        var auth_gen = randomString(6)
-        return CheckKeyExist(auth_gen)
-      }  
-  });
-}
+// var CheckKeyExist = function(oauth_code){
+//   return redis.get(oauth_code).then(function (result) {
+//       if(result=='' || result.length == 0 ) {
+//         return oauth_code
+//       }else {
+//         var auth_gen = randomString(6)
+//         return CheckKeyExist(auth_gen)
+//       }  
+//   });
+// }
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -278,7 +278,7 @@ app.post('/alexa.ai',(req,res)=>{
     if(typeof params.app == 'undefined' || appsList.includes(params.app.toLowerCase())==false) {
       redis.get('amazon_voice').then(function (result) {
         console.log('amazon voice = ',result);
-        let tmpParams = JSON.parse(result)
+        var tmpParams = JSON.parse(result)
         msg = "<speak>Show "+tmpParams.message+" on "+tmpParams.params.app+"</speak>"
         broadcastWebhook(result)
       });
