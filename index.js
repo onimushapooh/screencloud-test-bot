@@ -1,6 +1,7 @@
 try {
   require('dotenv').config()
 } catch (e) {
+  
   console.log('error', e)
 }
 const fs = require('fs')
