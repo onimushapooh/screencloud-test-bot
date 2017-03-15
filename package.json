@@ -2,6 +2,9 @@
   "name": "screencloud-test-bot",
   "version": "1.0.0",
   "description": "test bot for screencloud",
+  "engines": {
+    "node": "5.9.1"
+  },
   "main": "index.js",
   "scripts": {
     "test": "npm test.js",

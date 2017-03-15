@@ -1,9 +1,9 @@
-// try {
-//   require('dotenv').config()
-// } catch (e) {
+try {
+  require('dotenv').config()
+} catch (e) {
 
-//   console.log('error', e)
-// }
+  console.log('error', e)
+}
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
