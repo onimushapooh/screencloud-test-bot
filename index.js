@@ -7,7 +7,7 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const express = require('express')
-var exphbs_new  = require('express-handlebars');
+var exphbs = require('express3-handlebars');
 
 const bodyParser = require('body-parser')
 const app = express()
@@ -57,8 +57,8 @@ function randomString(length) {
 //   });
 // }
 
-// app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-// app.set('view engine', 'handlebars');
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 // app.set('views', path.join(__dirname, 'views'))
 
 app.use(bodyParser.json())
