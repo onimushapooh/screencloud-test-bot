@@ -59,14 +59,6 @@ function randomString(length) {
 //   });
 // }
 
-app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
-app.set('view engine', 'hbs');
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-
-app.set('port', (process.env.PORT || 8080))
-
 // enable CORS
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -75,6 +67,17 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
   next()
 })
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
+app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
+app.set('view engine', 'hbs');
+
+app.set('port', (process.env.PORT || 8080))
+
+
 app.get('/',(req,res)=>{
   res.status(200).send('server OK!!')
 })
