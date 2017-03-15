@@ -7,7 +7,7 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const express = require('express')
-var exphbs  = require('express-handlebars');
+var exphbs_new  = require('express-handlebars');
 
 const bodyParser = require('body-parser')
 const app = express()
