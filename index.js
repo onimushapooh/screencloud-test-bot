@@ -64,8 +64,9 @@ app.get('/oauth',(req,res)=>{
 
   console.log('query = ',req.query)
 
+  res.send('hello world = '+authorization_code)
 
-  res.redirect(redirect_url)
+  // res.redirect(redirect_url)
 })
 
 app.post('/api.ai',(req,res)=>{
