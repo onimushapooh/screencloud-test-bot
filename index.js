@@ -1,9 +1,9 @@
-try {
-  require('dotenv').config()
-} catch (e) {
+// try {
+//   require('dotenv').config()
+// } catch (e) {
 
-  console.log('error', e)
-}
+//   console.log('error', e)
+// }
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
@@ -11,7 +11,7 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const app = express()
-// const exphbs = require('express-handlebars')
+const exphbs = require('express-handlebars')
 
 // const api = express()
 var WebSocketServer = require('uws').Server
