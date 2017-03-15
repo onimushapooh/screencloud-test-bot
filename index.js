@@ -7,7 +7,7 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const express = require('express')
-var exphbs = require('express3-handlebars');
+const exphbs = require('express3-handlebars')
 
 const bodyParser = require('body-parser')
 const app = express()
@@ -59,13 +59,13 @@ function randomString(length) {
 
 // app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 
-var hbs = exphbs.create({
-  // Specify helpers which are only registered on this instance.
-  helpers: {
-    PairCode: function () { return 'to be override' },
-    RedirectURL: function () { return 'redirect url' }
-  }
-})
+// var hbs = exphbs.create({
+//   // Specify helpers which are only registered on this instance.
+//   helpers: {
+//     PairCode: function () { return 'to be override' },
+//     RedirectURL: function () { return 'redirect url' }
+//   }
+// })
 
 // app.engine('handlebars', hbs.engine)
 // app.set('view engine', 'handlebars');
