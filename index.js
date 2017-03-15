@@ -62,6 +62,9 @@ app.get('/oauth',(req,res)=>{
   var redirect_url = req.query.redirect_uri+'#access_token='+authorization_code+'&token_type=bearer&state='+req.query.state
   console.log('redirect url = ',redirect_url)
 
+  console.log('query = ',req.query)
+
+
   res.redirect(redirect_url)
 })
 
