@@ -1,7 +1,7 @@
 try {
   require('dotenv').config()
 } catch (e) {
-  
+
   console.log('error', e)
 }
 const fs = require('fs')
@@ -11,7 +11,7 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const app = express()
-var exphbs = require('express-handlebars')
+const exphbs = require('express-handlebars')
 
 // const api = express()
 var WebSocketServer = require('uws').Server
