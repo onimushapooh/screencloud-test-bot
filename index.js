@@ -72,8 +72,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 
-// app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main'}));
-// app.set('view engine', 'hbs');
+app.engine('hbs', exphbs({extname:'hbs', defaultLayout:'main'}));
+app.set('view engine', 'hbs');
 
 app.set('port', (process.env.PORT || 8080))
 
