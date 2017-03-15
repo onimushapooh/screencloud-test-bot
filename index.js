@@ -10,8 +10,7 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const app = express()
-
-var expressHbs = require('express-handlebars')
+var exphbs = require('express-handlebars')
 
 // const api = express()
 var WebSocketServer = require('uws').Server
