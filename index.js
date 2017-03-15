@@ -11,7 +11,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 
-var expressHbs = require('express3-handlebars')
+var expressHbs = require('express-handlebars')
 
 // const api = express()
 var WebSocketServer = require('uws').Server
@@ -72,7 +72,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 
-app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main'}));
+// app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main'}));
 // app.set('view engine', 'hbs');
 
 app.set('port', (process.env.PORT || 8080))
