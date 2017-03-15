@@ -7,6 +7,7 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const express = require('express')
+var exphbs  = require('express-handlebars');
 
 const bodyParser = require('body-parser')
 const app = express()
@@ -17,7 +18,7 @@ var redis = new Redis(process.env.REDIS_URL);
 
 var crypto = require('crypto'),
     algorithm = 'aes-128-cfb',
-    password = 'abscdefg';
+    password = 'cokefugu';
 
 var googleWSConnections = {}
 var amazonWSConnections = {}
@@ -38,6 +39,27 @@ function decrypt(text){
   return dec;
 }
 
+function randomString(length) {
+    var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
+
+var CheckKeyExist = function(oauth_code){
+  return redis.get(oauth_code).then(function (result) {
+      if(result=='' || result.length == 0 ) {
+        return oauth_code
+      }else {
+        var auth_gen = randomString(6)
+        return CheckKeyExist(auth_gen)
+      }  
+  });
+}
+
+app.engine('handlebars', exphbs({defaultLayout: 'pair'}));
+app.set('view engine', 'handlebars');
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -57,16 +79,17 @@ app.get('/',(req,res)=>{
 
 app.get('/oauth',(req,res)=>{
   var client_id = req.query.client_id
-  var client_key = 'screencloud-test'  //new Date().getTime()
+  var client_key = randomString(8)
   var authorization_code = encrypt(client_id+'-'+client_key)
+  redis.set(authorization_code,client_key);
+  // CheckKeyExist(authorization_code).then(function (result){
   var redirect_url = req.query.redirect_uri+'#access_token='+authorization_code+'&token_type=bearer&scope='+req.query.scope+'&state='+req.query.state
-  console.log('redirect url = ',redirect_url)
+    console.log('redirect url = ',redirect_url)
 
-  console.log('query = ',req.query)
+    console.log('query = ',req.query)
 
-  res.send('hello world = '+authorization_code)
-
-  // res.redirect(redirect_url)
+  res.render('pair',{PairCode:client_key,RedirectURL:redirect_url});
+  // })
 })
 
 app.post('/api.ai',(req,res)=>{
