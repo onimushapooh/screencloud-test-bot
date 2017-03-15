@@ -7,10 +7,12 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const express = require('express')
-var expressHbs = require('express3-handlebars')
 
 const bodyParser = require('body-parser')
 const app = express()
+
+var expressHbs = require('express3-handlebars')
+
 // const api = express()
 var WebSocketServer = require('uws').Server
 var Redis = require('ioredis');
@@ -56,16 +58,6 @@ function randomString(length) {
 //       }  
 //   });
 // }
-
-// app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-
-// var hbs = exphbs.create({
-//   // Specify helpers which are only registered on this instance.
-//   helpers: {
-//     PairCode: function () { return 'to be override' },
-//     RedirectURL: function () { return 'redirect url' }
-//   }
-// })
 
 app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
 app.set('view engine', 'hbs');
