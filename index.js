@@ -24,6 +24,7 @@ var crypto = require('crypto'),
 
 var googleWSConnections = {}
 var amazonWSConnections = {}
+var googlePairCode = ''
 var appsList = ['youtube','notice','message','nba','nfl','football','soccer','epl','premier league','time','weather','skynews','board','trello','slack','facebook','twitter','instagram','giphy','bbc',
 'cnn','techcrunch','stock','livenews','nasa']
 
@@ -90,7 +91,7 @@ app.get('/oauth',(req,res)=>{
   redis.set(authorization_code,client_key);
   // CheckKeyExist(authorization_code).then(function (result){
   var redirect_url = req.query.redirect_uri+'#access_token='+authorization_code+'&token_type=bearer&scope='+req.query.scope+'&state='+req.query.state
-    console.log('redirect url = ',redirect_url)
+    // console.log('redirect url = ',redirect_url)
 
     console.log('query = ',req.query)
     // res.send('hello')
@@ -105,6 +106,9 @@ app.post('/api.ai',(req,res)=>{
   console.log('Check Request : ',bodyReq)
   // render
   console.log('orignal REQ = ',req.body.originalRequest)
+  var accessTK = req.body.originalRequest.data.user.access_token.replace(' ','+')
+  console.log('pair code = ',googlePairCode)
+  
   if(bodyReq.parameters.app == '') {
     msg = 'Sorry, i did not quite catch that'
   }else {
@@ -167,12 +171,21 @@ app.post('/api.ai',(req,res)=>{
     if(typeof bodyReq.parameters.app == 'undefined' || bodyReq.parameters.app.length == 0) {
       invalidapp = true
       // Or using a promise if the last argument isn't a function
+      var lastCMD = ''
       redis.get('google_voice').then(function (result) {
+        // 
+        lastCMD = result
+        return redis.get(accessTK)
+      }).then((pairCode)=>{
+        googlePairCode = pairCode 
         broadcastWebhook(result)
-      });
+      })
     }else {
       redis.set('google_voice',JSON.stringify({params:params,message:search_msg}));
-      broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
+      redis.get(accessTK).then((result)=>{
+        googlePairCode = result
+        broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
+      })
     }
     
   }
@@ -336,15 +349,21 @@ var wss = new WebSocketServer({ server })
 
 
 function broadcastWebhook (message) {
+
   var wsClientKeys = Object.keys(googleWSConnections)
   console.log('wsClientKeys = ', wsClientKeys)
-  wsClientKeys.map( (clientKey) => {
-    var ws = googleWSConnections[clientKey]
-    try {
-      ws.send(message)
-    } catch ( e ){
-      console.log('can not send message to client : ' + clientKey, e)
-      delete googleWSConnections[clientKey]
+  
+  console.log('paringCode',googlePairCode)
+
+  wsClientKeys.map( (clientCode) => {
+    if(googlePairCode==clientCode) {
+      var ws = googleWSConnections[clientCode]
+      try {
+        ws.send(message)
+      } catch ( e ){
+        console.log('can not send message to client : ' + clientCode, e)
+        delete googleWSConnections[clientCode]
+      }
     }
   })
 }
@@ -371,14 +390,15 @@ wss.on('connection', function (ws) {
   console.log('[wss] connection', ws)
   var clientKey = ''
   var clientName = ''
-
+  var clientCode = ''
   ws.once('message', (message)=>{
     console.log('msg = ', message)
     var jsonMsg = JSON.parse(message)
     clientKey = jsonMsg.clientKey
     clientName = jsonMsg.clientName
+    clientCode = jsonMsg.clientCode
     if(clientName=='google') {
-      googleWSConnections[clientKey] = ws 
+      googleWSConnections[clientCode] = ws 
     }else {
       amazonWSConnections[clientKey] = ws
     }
@@ -388,7 +408,7 @@ wss.on('connection', function (ws) {
   ws.once('close', ()=> {
     console.log('client is close : ', clientKey)
     if(clientName=='google') {
-      delete googleWSConnections[clientKey]
+      delete googleWSConnections[clientCode]
     }else {
       delete amazonWSConnections[clientKey]
     }
