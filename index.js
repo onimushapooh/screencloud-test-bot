@@ -107,7 +107,7 @@ app.post('/api.ai',(req,res)=>{
   // render
   console.log('orignal REQ = ',req.body.originalRequest)
   var accessTK = req.body.originalRequest.data.user.access_token.replace(' ','+')
-  console.log('pair code = ',googlePairCode)
+  // console.log('pair code = ',googlePairCode)
   
   if(bodyReq.parameters.app == '') {
     msg = 'Sorry, i did not quite catch that'
@@ -356,7 +356,9 @@ function broadcastWebhook (message) {
   console.log('paringCode',googlePairCode)
 
   wsClientKeys.map( (clientCode) => {
+    console.log('pairingCode = ',googlePairCode,' clientCode = ',clientCode)
     if(googlePairCode==clientCode) {
+      console.log('matching code ')
       var ws = googleWSConnections[clientCode]
       try {
         ws.send(message)
