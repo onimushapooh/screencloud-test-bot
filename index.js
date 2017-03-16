@@ -93,8 +93,8 @@ app.get('/oauth',(req,res)=>{
     console.log('redirect url = ',redirect_url)
 
     console.log('query = ',req.query)
-    res.send('hello')
-  // res.render('pair',{PairCode:client_key,RedirectURL:redirect_url});
+    // res.send('hello')
+  res.render('pair',{PairCode:client_key,RedirectURL:redirect_url});
   // })
 })
 
