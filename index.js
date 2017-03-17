@@ -421,6 +421,10 @@ wss.on('connection', function (ws) {
     clientName = jsonMsg.clientName
     clientCode = jsonMsg.clientCode
     if(clientName=='google') {
+      if(typeof googleWSConnections[clientCode] == 'undefined') {
+        googleWSConnections[clientCode] = {}
+      }
+      
       googleWSConnections[clientCode][clientKey] = ws 
     }else {
       amazonWSConnections[clientKey] = ws
