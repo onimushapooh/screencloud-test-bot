@@ -373,20 +373,20 @@ var wss = new WebSocketServer({ server })
 // }
 
 function broadcastWebhook (message) {
-
-  var wsClientKeys = googleWSConnections[googlePairCode]
+  var wsClientKeys = Object.keys(googleWSConnections[googlePairCode])
+  // var wsClientKeys = googleWSConnections[googlePairCode]
   console.log('wsClientKeys = ', wsClientKeys)
   
   console.log('paringCode',googlePairCode)
 
-  wsClientKeys.map( (clientCode) => {
+  wsClientKeys.map( (clientKey) => {
       console.log('matching code ')
-      var ws = wsClientKeys[clientCode]
+      var ws = googleWSConnections[googlePairCode][clientKey]
       try {
         ws.send(message)
       } catch ( e ){
         console.log('can not send message to client : ' + clientCode, e)
-        delete wsClientKeys[clientCode]
+        delete googleWSConnections[googlePairCode][clientKey]
       }
   })
 }
@@ -422,11 +422,10 @@ wss.on('connection', function (ws) {
     clientCode = jsonMsg.clientCode
     if(clientName=='google') {
       if(typeof googleWSConnections[clientCode] == 'undefined') {
-        googleWSConnections[clientCode] = []
+        googleWSConnections[clientCode] = {}
       }
-
-      googleWSConnections[clientCode].push(ws) 
       
+      googleWSConnections[clientCode][clientKey] = ws 
     }else {
       amazonWSConnections[clientKey] = ws
     }
