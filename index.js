@@ -348,25 +348,46 @@ var server = http.createServer(app).listen(process.env.PORT,function(){
 var wss = new WebSocketServer({ server })
 
 
+// function broadcastWebhook (message) {
+
+//   var wsClientKeys = Object.keys(googleWSConnections)
+//   console.log('wsClientKeys = ', wsClientKeys)
+  
+//   console.log('paringCode',googlePairCode)
+
+//   wsClientKeys.map( (clientCode) => {
+//     console.log('pairingCode = ',googlePairCode,' clientCode = ',clientCode)
+//     if(googlePairCode==clientCode) {
+//       clientCode.map((clientKey)=>{
+//         console.log('matching code ')
+//         var ws = googleWSConnections[clientCode]
+//         try {
+//           ws.send(message)
+//         } catch ( e ){
+//           console.log('can not send message to client : ' + clientCode, e)
+//           delete googleWSConnections[clientCode]
+//         }
+//       })
+//     }
+//   })
+// }
+
 function broadcastWebhook (message) {
 
-  var wsClientKeys = Object.keys(googleWSConnections)
+  var wsClientKeys = googleWSConnections[googlePairCode]
   console.log('wsClientKeys = ', wsClientKeys)
   
   console.log('paringCode',googlePairCode)
 
   wsClientKeys.map( (clientCode) => {
-    console.log('pairingCode = ',googlePairCode,' clientCode = ',clientCode)
-    if(googlePairCode==clientCode) {
       console.log('matching code ')
-      var ws = googleWSConnections[clientCode]
+      var ws = wsClientKeys[clientCode]
       try {
         ws.send(message)
       } catch ( e ){
         console.log('can not send message to client : ' + clientCode, e)
-        delete googleWSConnections[clientCode]
+        delete wsClientKeys[clientCode]
       }
-    }
   })
 }
 
@@ -400,7 +421,7 @@ wss.on('connection', function (ws) {
     clientName = jsonMsg.clientName
     clientCode = jsonMsg.clientCode
     if(clientName=='google') {
-      googleWSConnections[clientCode] = ws 
+      googleWSConnections[clientCode][clientKey] = ws 
     }else {
       amazonWSConnections[clientKey] = ws
     }
@@ -410,7 +431,7 @@ wss.on('connection', function (ws) {
   ws.once('close', ()=> {
     console.log('client is close : ', clientKey)
     if(clientName=='google') {
-      delete googleWSConnections[clientCode]
+      delete googleWSConnections[clientCode][clientKey]
     }else {
       delete amazonWSConnections[clientKey]
     }
