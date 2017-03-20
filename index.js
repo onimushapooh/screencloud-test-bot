@@ -182,8 +182,11 @@ app.post('/api.ai',(req,res)=>{
         broadcastWebhook(result)
       })
     }else {
+      console.log('cmd = ',accessTK)
+
       redis.set('google_voice',JSON.stringify({params:params,message:search_msg}));
       redis.get(accessTK).then((result)=>{
+        console.log('result = ',result)
         googlePairCode = result
         broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
       })
