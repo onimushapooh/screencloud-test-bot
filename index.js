@@ -377,6 +377,9 @@ var wss = new WebSocketServer({ server })
 // }
 
 function broadcastWebhook (message) {
+  if(typeof googleWSConnections[googlePairCode] =='undefined' || googleWSConnections[googlePairCode]==null) {
+    return
+  }
   var wsClientKeys = Object.keys(googleWSConnections[googlePairCode])
   // var wsClientKeys = googleWSConnections[googlePairCode]
   console.log('wsClientKeys = ', wsClientKeys)
