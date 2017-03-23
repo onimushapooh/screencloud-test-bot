@@ -431,7 +431,7 @@ wss.on('connection', function (ws) {
       googleWSConnections[clientCode][clientKey] = ws
 
       redis.get(clientCode).then((result)=>{
-        console.log('got last cmd')
+        console.log('got last cmd = ',result)
         if (result != '' && typeof result != 'undefined') {
           ws.send(result)
         }
