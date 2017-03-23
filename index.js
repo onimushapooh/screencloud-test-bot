@@ -85,6 +85,20 @@ app.get('/',(req,res)=>{
   res.status(200).send('server OK!!')
 })
 
+app.get('/getLastCmd',(req,res)=>{
+  var code = req.query.gcode
+  redis.get(code).then((result)=>{
+    if(result!='' && typeof result != 'undefined') {
+      res.status(200).json({lastCmd:result})
+    }else {
+      res.status(200).json({lastCmd:''})
+    }
+  }).catch((error)=>{
+    res.status(200).json({lastCmd:result})
+  })
+  
+})
+
 app.get('/oauth',(req,res)=>{
   var client_id = req.query.client_id
   var client_key = randomString(8)
@@ -173,22 +187,29 @@ app.post('/api.ai',(req,res)=>{
       invalidapp = true
       // Or using a promise if the last argument isn't a function
       var lastCMD = ''
-      redis.get('google_voice').then(function (result) {
-        // 
-        lastCMD = result
-        return redis.get(accessTK)
-      }).then((pairCode)=>{
-        googlePairCode = pairCode 
-        broadcastWebhook(result)
+      redis.get(accessTK).then((code)=>{
+        googlePairCode = code 
+        return redis.get(code)
+      }).then((lastCmd)=>{
+
+        broadcastWebhook(lastCmd)
       })
+      // redis.get('google_voice').then(function (result) {
+      //   // 
+      //   lastCMD = result
+      //   return redis.get(accessTK)
+      // }).then((pairCode)=>{
+      //   googlePairCode = pairCode 
+      //   broadcastWebhook(result)
+      // })
     }else {
       console.log('cmd = ',accessTK)
-
-      redis.set('google_voice',JSON.stringify({params:params,message:search_msg}));
-      redis.get(accessTK).then((result)=>{
-        console.log('result = ',result)
-        googlePairCode = result
+      redis.get(accessTK).then((code)=>{
+        
+        googlePairCode = code 
+        redis.set(code,JSON.stringify({params:params,message:search_msg}));
         broadcastWebhook( JSON.stringify({params:params,message:search_msg}) )
+
       })
     }
     
