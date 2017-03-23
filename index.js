@@ -372,31 +372,6 @@ var server = http.createServer(app).listen(process.env.PORT,function(){
 
 var wss = new WebSocketServer({ server })
 
-
-// function broadcastWebhook (message) {
-
-//   var wsClientKeys = Object.keys(googleWSConnections)
-//   console.log('wsClientKeys = ', wsClientKeys)
-  
-//   console.log('paringCode',googlePairCode)
-
-//   wsClientKeys.map( (clientCode) => {
-//     console.log('pairingCode = ',googlePairCode,' clientCode = ',clientCode)
-//     if(googlePairCode==clientCode) {
-//       clientCode.map((clientKey)=>{
-//         console.log('matching code ')
-//         var ws = googleWSConnections[clientCode]
-//         try {
-//           ws.send(message)
-//         } catch ( e ){
-//           console.log('can not send message to client : ' + clientCode, e)
-//           delete googleWSConnections[clientCode]
-//         }
-//       })
-//     }
-//   })
-// }
-
 function broadcastWebhook (message) {
   if(typeof googleWSConnections[googlePairCode] =='undefined' || googleWSConnections[googlePairCode]==null) {
     return
@@ -453,7 +428,15 @@ wss.on('connection', function (ws) {
         googleWSConnections[clientCode] = {}
       }
       
-      googleWSConnections[clientCode][clientKey] = ws 
+      googleWSConnections[clientCode][clientKey] = ws
+
+      redis.get(clientCode).then((result)=>{
+        console.log('got last cmd')
+        if (result != '' && typeof result != 'undefined') {
+          ws.send(result)
+        }
+      })
+
     }else {
       amazonWSConnections[clientKey] = ws
     }
