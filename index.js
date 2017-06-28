@@ -302,8 +302,8 @@ app.post('/alexa.ai', (req, res) => {
     }
 
     endSession = true
-    console.log('appsList = ',appsList);
-    if (typeof params.app === 'undefined' || appsList.includes(params.app.toLowerCase()) === false) {
+    console.log('appsList = ', appsList)
+    if (typeof params.app === 'undefined' || appsList.indexOf(params.app.toLowerCase()) === -1) {
       redis.get('amazon_voice').then(function (result) {
         console.log('amazon voice = ', result)
         var tmpParams = JSON.parse(result)
