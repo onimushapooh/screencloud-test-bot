@@ -402,7 +402,7 @@ wss.on('connection', function (ws) {
     clientKey = jsonMsg.clientKey
     clientName = jsonMsg.clientName
     clientCode = jsonMsg.clientCode
-    if (clientName == 'google') {
+    if (clientName === 'google') {
       if (typeof googleWSConnections[clientCode] === 'undefined') {
         googleWSConnections[clientCode] = {}
       }
@@ -411,18 +411,22 @@ wss.on('connection', function (ws) {
 
       redis.get(clientCode).then((result) => {
         console.log('got last cmd = ', result)
-        if (result != '' && typeof result !== 'undefined') {
+        if (result !== '' && typeof result !== 'undefined') {
           ws.send(result)
         }
+      }).catch((err) => {
+        console.log('no last command = ', err)
+        ws.send('no')
       })
     } else {
       amazonWSConnections[clientKey] = ws
+      ws.send('no')
     }
   })
 
   ws.once('close', () => {
     console.log('client is close : ', clientKey)
-    if (clientName == 'google') {
+    if (clientName === 'google') {
       delete googleWSConnections[clientCode][clientKey]
     } else {
       delete amazonWSConnections[clientKey]
